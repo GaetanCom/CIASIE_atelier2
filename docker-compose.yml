@@ -1,0 +1,78 @@
+version: "3"
+
+networks:
+  reunion.net:
+    driver: bridge
+
+services: 
+  api.reunion:
+    container_name: api.reunion
+    image: node
+    ports: 
+      - "19080:3000"
+    volumes: 
+      - ./api:/usr/src/app
+      - ./api/node_modules:/usr/src/outside/node_modules
+    working_dir: /usr/src/app
+    command: bash -c 'npm i && npm run dev'
+    links:
+      - mysql.reunion
+    networks: 
+      - reunion.net
+    env_file: 
+      - ./api/.env.dev
+
+  back.reunion:
+    container_name: back.reunion
+    image: node
+    ports: 
+      - "19180:3000"
+    volumes: 
+      - ./back:/usr/src/app
+      - ./back/node_modules:/usr/src/outside/node_modules
+    working_dir: /usr/src/app
+    command: bash -c 'npm i && npm run dev'
+    networks: 
+      - reunion.net
+
+  front.reunion:
+    container_name: front.reunion
+    image: node
+    ports: 
+      - "19280:3000"
+    volumes: 
+      - ./front:/usr/src/app
+      - ./front/node_modules:/usr/src/outside/node_modules
+    working_dir: /usr/src/app
+    command: bash -c 'npm i && npm run dev'
+    networks: 
+      - reunion.net
+
+  mysql.reunion:
+    container_name: mysql.reunion
+    image: mariadb:latest
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8 --collation-server=utf8_general_ci
+    env_file: 
+      - .mysql/.env.dev
+    ports:
+      - "3307:3306"
+    volumes:
+      - .mysql_data:/var/lib/mysql
+    networks: 
+      - reunion.net
+      
+  phpmyadmin.reunion:
+    image: phpmyadmin
+    restart: always
+    ports: 
+      - "8080:80"
+    environment: 
+      - PMA_ARBITRARY=1
+    links: 
+      - mysql.reunion
+    networks: 
+      - reunion.net
+  
+
+

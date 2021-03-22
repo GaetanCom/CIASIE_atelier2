@@ -1,5 +1,18 @@
 const express = require('express');
 const router = express.Router();
+const bodyParser = require("body-parser");
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+var mysql      = require('mysql2');
+var connection = mysql.createConnection({
+    host     : 'db',
+    user     : 'user',
+    password: 'user',
+    database:"reunion"
+});
+connection.connect();
 
 router.get("/users", (req,res)=>{
     connection.query('SELECT * FROM Members', function(err, rows, fields) {

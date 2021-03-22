@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const bodyParser = require("body-parser");
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+//router.use(bodyParser.urlencoded({ extended: false }));
+//router.use(bodyParser.json());
 
 var mysql      = require('mysql2');
 var connection = mysql.createConnection({
@@ -22,7 +21,7 @@ router.get("/", (req,res)=>{
             data.push({
                 "id": rows[i].id,
                 "firstname": rows[i].firstname,
-                "name": rows[i].name,
+                "lastname": rows[i].lastname,
                 "mail": rows[i].mail,
                 "pseudo": rows[i].pseudo,
                 "password":rows[i].password
@@ -44,7 +43,7 @@ router.get('/:id', (req, res) => {
         data.push({
             "id": rows[0].id,
             "firstname": rows[0].firstname,
-            "name": rows[0].name,
+            "lastname": rows[0].lastname,
             "mail": rows[0].mail,
             "pseudo": rows[0].pseudo,
             "password": rows[0].password
@@ -57,12 +56,12 @@ router.get('/:id', (req, res) => {
 router.post("/connection/signup", (req,res) => {
     console.log(req.body);
     let firstname = req.body.firstname
-    let name = req.body.name
+    let lastname = req.body.lastname
     let mail = req.body.mail
     let pseudo = req.body.pseudo
     let password=req.body.password
-     var sql = "INSERT INTO Members (firstname, name,mail,pseudo,password) VALUES (?,?,?,?,?)";
-    connection.query(sql, [firstname,name,mail,pseudo,password],function (err, result) {
+     var sql = "INSERT INTO Members (firstname,lastname,mail,pseudo,password) VALUES (?,?,?,?,?)";
+    connection.query(sql, [firstname,lastname,mail,pseudo,password],function (err, result) {
 
         if (err) {
             throw err;

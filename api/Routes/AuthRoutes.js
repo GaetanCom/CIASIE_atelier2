@@ -86,6 +86,72 @@ router.get('/connection/checkRegistered', (req, res) => {
 return 	
 });
 
+router.post("/update/firstname", (req, res)=> {
+    let newFirstName = req.body.firstname
+    let id = req.body.id
+    connection.query("UPDATE Members SET firstname=? WHERE id=?", [newFirstName, id], function (err, row, fields) {
+        if (err) {
+              throw err;
+              res.json(false)
+          } 
+
+       res.json(true)
+    })
+})
+
+router.post("/update/lastname", (req, res)=> {
+    let newLastname = req.body.lastname
+    let id = req.body.id
+    connection.query("UPDATE Members SET lastname=? WHERE id=?", [newLastname, id], function (err, row, fields) {
+        if (err) {
+              throw err;
+              res.json(false)
+          } 
+
+       res.json(true)
+    })
+})
+
+router.post("/update/mail", (req, res)=> {
+    let newMail = req.body.mail
+    let id = req.body.id
+    connection.query("UPDATE Members SET mail=? WHERE id=?", [newMail, id], function (err, row, fields) {
+        if (err) {
+              throw err;
+              res.json(false)
+          } 
+
+       res.json(true)
+    })
+})
+
+router.post("/update/pseudo", (req, res)=> {
+    let newPseudo = req.body.pseudo
+    let id = req.body.id
+    connection.query("UPDATE Members SET pseudo=? WHERE id=?", [newPseudo, id], function (err, row, fields) {
+        if (err) {
+              throw err;
+              res.json(false)
+          } 
+
+       res.json(true)
+    })
+})
+
+router.post("/update/password", (req, res)=> {
+    let newPassword = req.body.password
+    let id = req.body.id
+    connection.query("UPDATE Members SET password=? WHERE id=?", [newPassword, id], function (err, row, fields) {
+        if (err) {
+              throw err;
+              res.json(false)
+          } 
+
+       res.json(true)
+    })
+})
+
+
 
 
 module.exports = router;

@@ -14,7 +14,7 @@ var connection = mysql.createConnection({
 });
 connection.connect();
 
-router.get("/users", (req,res)=>{
+router.get("/", (req,res)=>{
     connection.query('SELECT * FROM Members', function(err, rows, fields) {
         if (err) throw err;
         let data=[]
@@ -33,7 +33,7 @@ router.get("/users", (req,res)=>{
 });
 })
 
-router.get('/users/:id', (req, res) => {
+router.get('/:id', (req, res) => {
     connection.query('SELECT * FROM Members WHERE id=?', [req.params.id], function (err, rows, fields) {
         if (err) throw err;
         let data = []
@@ -54,7 +54,7 @@ router.get('/users/:id', (req, res) => {
     })
 });
 
-router.post("/users/connection/signup", (req,res) => {
+router.post("/connection/signup", (req,res) => {
     console.log(req.body);
     let firstname = req.body.firstname
     let name = req.body.name
@@ -75,7 +75,7 @@ router.post("/users/connection/signup", (req,res) => {
     
 })
 
-router.get('/users/connection/checkRegistered', (req, res) => {
+router.get('/connection/checkRegistered', (req, res) => {
     let login = req.query.login
     let pwd = req.query.pwd
    connection.query('SELECT * FROM Members WHERE pseudo=? AND password=?', [login,pwd], function (err, rows, fields) {

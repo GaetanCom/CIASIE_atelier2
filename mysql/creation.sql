@@ -1,11 +1,10 @@
 CREATE TABLE Address
 (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    number INT,
     street VARCHAR(255),
-    city VARCHAR(255),
-    country VARCHAR(255),
-    longitude DOUBLE,
-    latitude DOUBLE
+    zipcode VARCHAR(255),
+    country VARCHAR(255)
 )ENGINE=InnoDB;
 
 CREATE TABLE Members

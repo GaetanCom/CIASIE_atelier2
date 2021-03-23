@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import "package:http/http.dart" as http;
+import 'package:reunion_mobile/data/global.dart';
+import 'package:reunion_mobile/models/Member.dart';
 
 class ConnectionWidget extends StatefulWidget {
   @override
@@ -11,29 +13,47 @@ class ConnectionWidget extends StatefulWidget {
 
 class _ConnectionWidgetState extends State<ConnectionWidget> {
   final formkey = GlobalKey<FormState>();
+  var pseudoController = TextEditingController();
+  var pwdController = TextEditingController();
+  void isRegistered(c) async {
+    var login = pseudoController.text;
+    var pwd = pwdController.text;
+    print("Pseudo: " + pseudoController.text);
+    print("Password: " + pwdController.text);
 
-  Future<bool> isRegistered() async {
-    final response =
-        await http.get(Uri.https('http://localhost:19080', 'users'));
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(jsonDecode(response.body))));
-    /*if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return Album.fromJson(jsonDecode(response.body));
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
-    }*/
+    var client = new http.Client();
+
+    var uri = Uri.parse(
+        "http://192.168.0.10:19080/users/connection/checkRegistered?login=" +
+            login +
+            "&pwd=" +
+            pwd);
+    print(uri.host);
+    print(uri.port);
+
+    client.get(uri).then((response) {
+      if (response.body != "-1") {
+        //print(response.body);
+        var json = jsonDecode(response.body);
+        Global.user = new Member(json["id"], json["firstname"],
+            json["lastName"], json["mail"], json["pseudo"], json["password"]);
+
+        Navigator.pushNamed(c, "/");
+      } else {
+        print("mauvaise connexion");
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Mauvais login ou mot de passe')));
+      }
+    });
   }
 
-  void seConnecter() {
+  void seConnecter(c) {
     if (formkey.currentState.validate()) {
       // If the form is valid, display a snackbar. In the real world,
       // you'd often call a server or save the information in a database.
-      //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Processing Data')));
-      isRegistered();
+      // ScaffoldMessenger.of(context)
+      //   .showSnackBar(SnackBar(content: Text('Veuillez patienter')));
+      isRegistered(c);
     }
   }
 
@@ -45,6 +65,7 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
         children: <Widget>[
           Text("Pseudo"),
           TextFormField(
+            controller: pseudoController,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Veuillez entrer un pseudo';
@@ -54,6 +75,7 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
           ),
           Text("Mot de passe"),
           TextFormField(
+            controller: pwdController,
             obscureText: true,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -63,7 +85,9 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
             },
           ),
           ElevatedButton(
-            onPressed: seConnecter,
+            onPressed: () {
+              seConnecter(context);
+            },
             child: Text('Se connecter'),
           ),
           // Add TextFormFields and ElevatedButton here.

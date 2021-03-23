@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:reunion_mobile/pages/ConnectionPage.dart';
+import 'package:reunion_mobile/pages/Homepage.dart';
 
 class ReunionApp extends StatefulWidget {
   @override
@@ -14,7 +15,8 @@ class _ReunionAppState extends State<ReunionApp> {
     return MaterialApp(
       navigatorObservers: [routeObserver],
       routes: {
-        "/": (context) => ConnectionPage(),
+        "/connect": (context) => ConnectionPage(),
+        "/": (context) => Homepage()
       },
       title: 'Reunionou',
       theme: ThemeData(

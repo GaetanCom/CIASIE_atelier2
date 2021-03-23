@@ -5,7 +5,7 @@ INSERT INTO Members (id, pseudo, password, firstname, lastname, mail) VALUES
 (4, 'Zacpot',  'Zacpot123', 'Arthur', 'Loeuillet',  'Zacpot@gmail.com'),
 (5, 'Trema',  'Trema123', 'Loic', 'Oberle', 'Trema@gmail.com'),
 (6, 'Shiryu',  'Shiryu123', 'Scott', 'Halgue', 'Shiryu@gmail.com'),
-(7, 'Harry',  'Harry123', 'Harry', 'Potter', 'Harry@gmail.com');
+(7, 'Jbb',  'Jbb123', 'Jean-Baptiste', 'Bernard', 'Jbbernard@gmail.com');
 
 INSERT INTO Address (id, number, street, zipcode, country) VALUES
 (1, '27', 'Grande Rue', 54000, 'France'),
@@ -17,7 +17,29 @@ INSERT INTO Address (id, number, street, zipcode, country) VALUES
 (7, '26',  'Rue Emile Bertin', 54000, 'France');
 
 INSERT INTO Events (id, title, description, date, url, id_address, id_creator) VALUES
-(1, 'Mon anniversaire', 'Venez fêter mon anniv au Tacos', '05/05/2021/18:00', "https://www.google.com/", 2 , 2),
-(2, 'Ma bar-mitzvah', 'Venez fêter ma bar-mitzvah', '11/06/2021/14:00', "https://www.google.com/", 6 , 3),
-(3, 'Mon permis de conduire', 'Venez fêter mon permis de conduire', "https://www.google.com/", '20/03/2021/18:00', 7 , 4),
-(4, 'Mon Diplome', 'Venez fêter mon Diplome', '07/07/2021/10:00', "https://www.google.com/",5 , 5);
+(1, 'Mon anniversaire', 'Venez fêter mon anniv au Tacos', '05/05/2021/18:00', "https://www.google.com/", 2, 2),
+(2, 'Ma bar-mitzvah', 'Venez fêter ma bar-mitzvah', '11/06/2021/14:00', "https://www.google.com/", 6, 3),
+(3, 'Mon permis de conduire', 'Venez fêter mon permis de conduire', '20/03/2021/18:00', "https://www.google.com/", 7, 4),
+(4, 'Mon Diplome', 'Venez fêter mon Diplome', '07/07/2021/10:00', "https://www.google.com/", 5, 5);
+
+INSERT INTO Guests (id, accept, id_member, id_event) VALUES
+(1, TRUE, 3, 1),
+(2, FALSE, 4, 1),
+(3, TRUE, 5, 1),
+(4, FALSE, 6, 1),
+(5, FALSE, 7, 1),
+(6, TRUE, 2, 2),
+(7, FALSE, 4, 2),
+(8, TRUE, 5, 2),
+(9, FALSE, 6, 2),
+(10, FALSE, 7, 2),
+(11, TRUE, 2, 3),
+(12, FALSE, 3, 3),
+(13, TRUE, 5, 3),
+(14, FALSE, 6, 3),
+(15, FALSE, 7, 3),
+(16, TRUE, 2, 4),
+(17, FALSE, 3, 4),
+(18, TRUE, 4, 4),
+(19, FALSE, 6, 4),
+(20, FALSE, 7, 4);

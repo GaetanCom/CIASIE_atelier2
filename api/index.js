@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/users', auth_routes);
-app.use('/events', event_routes);
+// app.use('/events', event_routes);
 
 
 app.listen(port, () => {

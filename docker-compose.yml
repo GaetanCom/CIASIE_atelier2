@@ -16,12 +16,12 @@ services:
     working_dir: /usr/src/app
     command: bash -c 'npm i && npm run dev'
     links:
-      - db:db
-    # env_file: 
-    #   - ./api/.env.dev
+      - mysql.reunion
+    env_file: 
+      - ./api/.env.dev
 
 
-  db:
+  mysql.reunion:
     container_name: mysql.reunion
     image: mysql:latest
     restart: always
@@ -43,7 +43,7 @@ services:
     environment: 
       - ./api/.env.dev
     links: 
-      - db:db
+      - mysql.reunion
   
 #  back.reunion:
 #    container_name: back.reunion

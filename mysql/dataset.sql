@@ -17,7 +17,7 @@ INSERT INTO Address (id, number, street, zipcode, country) VALUES
 (7, '26',  'Rue Emile Bertin', 54000, 'France');
 
 INSERT INTO Events (id, title, description, date, url, id_address, id_creator) VALUES
-(1, 'Mon anniversaire', 'Venez fêter mon anniv a la Tacos', '05/05/2021/18:00', 2 ,2),
-(2, 'Ma bar mitsva', 'Venez fêter ma bar mitsva', '11/06/2021/14:00', 6 ,3),
-(3, 'Mon permis de conduire', 'Venez fêter mon permis de conduire', '20/03/2021/18:00', 7 ,4),
-(4, 'Mon Diplome', 'Venez fêter mon Diplome', '07/07/2021/10:00', 5 ,5);
+(1, 'Mon anniversaire', 'Venez fêter mon anniv au Tacos', '05/05/2021/18:00', "https://www.google.com/", 2 , 2),
+(2, 'Ma bar-mitzvah', 'Venez fêter ma bar-mitzvah', '11/06/2021/14:00', "https://www.google.com/", 6 , 3),
+(3, 'Mon permis de conduire', 'Venez fêter mon permis de conduire', "https://www.google.com/", '20/03/2021/18:00', 7 , 4),
+(4, 'Mon Diplome', 'Venez fêter mon Diplome', '07/07/2021/10:00', "https://www.google.com/",5 , 5);

@@ -16,7 +16,6 @@ app.get('/', (req, res) => {
 app.use('/users', auth_routes);
 app.use('/events', event_routes);
 
-
 app.listen(port, () => {
     console.log(`api listening at http://localhost:${port}`)
     

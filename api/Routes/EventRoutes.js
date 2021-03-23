@@ -13,13 +13,19 @@ const options = {
     formatter: null 
 };
 
+const CreateURL = () => {
+    return 'xxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+}
+
 router.get('/', async(req, res, next) => {
     let sqlreq = 'SELECT * FROM Events';
     
     try {
         const eventsData = await bdd.query(sqlreq);
         const events = eventsData;
-        
         
         let jsonData = [];
         let dataEvent;
@@ -51,7 +57,7 @@ router.post('/', async(req, res, next) => {
     const {title, description, date, idCreator, idAddress} = req.body;
     const members = req.body.members;
 
-    const url = 2;
+    const url = CreateURL();
     
     try {
         const events = await bdd.query(
@@ -69,6 +75,7 @@ router.post('/', async(req, res, next) => {
             title: title,
             description: description,
             date: date,
+            url: url,
             idCreator: idCreator,
             idAddress: idAddress
         });
@@ -80,6 +87,64 @@ router.post('/', async(req, res, next) => {
 
 
 });
+
+router.post('/member', async (req, res, next) => {
+
+    const eventId = req.body.eventId;
+    const memberId = req.body.memberId;
+
+    try {
+        let request = "INSERT INTO Guests (id, accept, id_event, id_member) VALUES (null, 3, "
+        + eventId + ", " 
+        + memberId + ");"
+
+        const addMember = await bdd.query(request);
+
+        res.json({
+            id: addMember.insertId,
+            accept: 3,
+            event: eventId,
+            member: memberId
+        })
+
+
+    } catch(err) {
+        console.log(err);
+        throw new Error(err);
+    }
+});
+
+router.get('/members', async (req, res, next) => {
+
+    let pseudo = req.query.p;
+
+
+    try {
+        let request = "SELECT id, pseudo FROM Members WHERE pseudo LIKE '%" + pseudo + "%'";
+
+        let listMembers = await bdd.query(request);
+
+        console.log(listMembers);
+        let members = [];
+
+        listMembers.forEach(element => {
+            let oneMember = {
+                id: element.id,
+                pseudo: element.pseudo,
+            }
+            members.push(oneMember);
+        })
+
+        res.json({
+            members: members,
+        })
+
+    } catch(err) {
+        console.log(err);
+        throw new Error(err);
+    }
+})
+
 
 router.post('/address', async(req, res, next) => {
 

@@ -1,6 +1,6 @@
 <template>
     <div class="Saisie">
-        <Input placeholder="Nom" id="nom" type="text" value="" ref="login"> </Input>
+        <Input placeholder="login" id="nom" type="text" value="" ref="login"> </Input>
         <br>
         <Input placeholder="Mot de passe" id="mdp" type="password" ref="password"> </Input>
         <br>
@@ -17,7 +17,7 @@ export default {
     
     data(){
         return{
-            adresseApi: "localhost:1980/users/connection/checkRegistered?",
+            adresseApi: "http://localhost:19080/users/connection/checkRegistered?login=",
             connecter: '',
         }
     },
@@ -25,14 +25,14 @@ export default {
 
     methods:{
         sendInfoHandler(){
-            let mail = this.$refs.login._data.donnee;
-            console.log(mail);
+            let login = this.$refs.login._data.donnee;
+            console.log(login);
             let pwd = this.$refs.password._data.donnee;
             console.log(pwd)
-            console.log(this.adresseApi+mail+"&"+pwd)
-            if((mail != "") && (pwd != "")){
+            console.log(this.adresseApi+login+"&pwd="+pwd)
+            if((login != "") && (pwd != "")){
                 axios
-                .get(this.adresseApi+mail+"&"+pwd)
+                .get(this.adresseApi+login+"&pwd="+pwd)
                 .then(reponse => {
                 console.log('Reponse OK');
                 console.log(reponse);

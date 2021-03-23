@@ -79,8 +79,12 @@ router.get('/connection/checkRegistered', (req, res) => {
     let pwd = req.query.pwd
    connection.query('SELECT * FROM Members WHERE pseudo=? AND password=?', [login,pwd], function (err, rows, fields) {
         if (err) throw err;
-
-       res.json(!rows.length==0)
+       if (!rows.length == 0) {
+            res.json(row[0].id)
+       } else {
+           res.json(-1)
+        }
+       
   
     })
 return 	

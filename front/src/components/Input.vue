@@ -4,6 +4,7 @@
         :placeholder="placeholder"
         :type="type" 
         :value="value"
+        @keyup.enter="sendInfo"
         v-model="donnee" />
 </template>
 
@@ -17,7 +18,7 @@ export default {
         }
     },
 
-    props: ['id','type','placeholder'],
+    props: ['id','type','placeholder','sendInfo'],
 
     // methods: {
     //     change(){

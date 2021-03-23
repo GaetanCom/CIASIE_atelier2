@@ -34,7 +34,7 @@ CREATE TABLE Events
 CREATE TABLE Guests
 (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    accept BOOLEAN,
+    accept INT,
     id_event INT,
     id_member INT
 )ENGINE=InnoDB;

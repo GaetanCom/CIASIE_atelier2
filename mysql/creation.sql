@@ -27,8 +27,7 @@ CREATE TABLE Events
     date VARCHAR(255),
     url VARCHAR(255),
     id_address INT,
-    id_creator INT,
-    id_message INT
+    id_creator INT
 )ENGINE=InnoDB;
 
 CREATE TABLE Guests
@@ -43,13 +42,12 @@ CREATE TABLE Messages
 (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     date VARCHAR(255),
-    id_member INT
+    id_member INT,
+    id_event INT
 )ENGINE=InnoDB;
 
 ALTER TABLE Events
 ADD CONSTRAINT fk_event_creator FOREIGN KEY (id_creator) REFERENCES Members(id);
-ALTER TABLE Events
-ADD CONSTRAINT fk_event_message FOREIGN KEY (id_message) REFERENCES Messages(id);
 ALTER TABLE Events
 ADD CONSTRAINT fk_event_address FOREIGN KEY (id_address) REFERENCES Address(id);
 
@@ -60,3 +58,5 @@ ADD CONSTRAINT fk_guest_member FOREIGN KEY (id_member) REFERENCES Members(id);
 
 ALTER TABLE Messages
 ADD CONSTRAINT fk_message_member FOREIGN KEY (id_member) REFERENCES Members(id);
+ALTER TABLE Messages
+ADD CONSTRAINT fk_message_event FOREIGN KEY (id_event) REFERENCES Events(id);

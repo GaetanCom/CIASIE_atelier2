@@ -16,7 +16,8 @@ CREATE TABLE Members
     lastname VARCHAR(255),
     mail VARCHAR(255),
     pseudo VARCHAR(255),
-    password VARCHAR(255)
+    password VARCHAR(255),
+    CONSTRAINT AK_pseudo UNIQUE(pseudo)
 )ENGINE=InnoDB;
 
 CREATE TABLE Events
@@ -33,7 +34,7 @@ CREATE TABLE Events
 CREATE TABLE Guests
 (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    accept BOOLEAN,
+    accept INT,
     id_event INT,
     id_member INT
 )ENGINE=InnoDB;
@@ -41,6 +42,7 @@ CREATE TABLE Guests
 CREATE TABLE Messages
 (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    text VARCHAR(255),
     date VARCHAR(255),
     id_member INT,
     id_event INT

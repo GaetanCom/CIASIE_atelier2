@@ -16,7 +16,8 @@ CREATE TABLE Members
     lastname VARCHAR(255),
     mail VARCHAR(255),
     pseudo VARCHAR(255),
-    password VARCHAR(255)
+    password VARCHAR(255),
+    CONSTRAINT AK_pseudo UNIQUE(pseudo)
 )ENGINE=InnoDB;
 
 CREATE TABLE Events

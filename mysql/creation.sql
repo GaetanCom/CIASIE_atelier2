@@ -41,6 +41,7 @@ CREATE TABLE Guests
 CREATE TABLE Messages
 (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    text VARCHAR(255),
     date VARCHAR(255),
     id_member INT,
     id_event INT

@@ -43,3 +43,19 @@ INSERT INTO Guests (id, accept, id_member, id_event) VALUES
 (18, TRUE, 4, 4),
 (19, FALSE, 6, 4),
 (20, FALSE, 7, 4);
+
+INSERT INTO Messages (id, text, date, id_member, id_event) VALUES
+(1, 'Venez nombreux', '22/03/2021/18:00', 2, 1),
+(2, 'Je serais là', '22/03/2021/18:00', 3, 1),
+(3, 'Impossible pour moi', '22/03/2021/18:00', 4, 1),
+(4, 'J arrive dans 5 minutes!', '22/03/2021/18:00', 5, 1),
+(5, 'ABS dzl', '22/03/2021/18:00', 6, 1),
+(6, 'pas la non plus', '22/03/2021/18:00', 7, 2),
+(7, 'ok', '22/03/2021/18:00', 2, 2),
+(8, 'dite moi si vous etes dispo', '22/03/2021/18:00', 3, 2),
+(9, 'Je pourrais pas venir dzl', '22/03/2021/18:00', 4, 2),
+(10, 'Je suis de la partie! :)', '22/03/2021/18:00', 5, 3),
+(11, 'Je sais pas encore', '22/03/2021/18:00', 6, 3),
+(12, 'Faut que je vois', '22/03/2021/18:00', 7, 3),
+(13, 'Lets go dude!', '22/03/2021/18:00', 2, 4),
+(14, 'aye j ai deja un truc de prévu mec', '22/03/2021/18:00', 3, 4);

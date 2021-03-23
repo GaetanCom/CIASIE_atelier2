@@ -3,6 +3,7 @@
         :id="id" 
         :placeholder="placeholder"
         :type="type" 
+        :value="value"
         v-model="donnee" />
 </template>
 
@@ -18,17 +19,18 @@ export default {
 
     props: ['id','type','placeholder'],
 
-    methods: {
-        change(){
-            this.value = this.text;
-        }
+    // methods: {
+    //     change(){
+    //         this.value = this.text;
+    //     },
+    //     emitValue(){
+    //         this.$emit('getValue',)
+    //     }
 
-    },
+    // },
 
     created(){
-        console.log("value de text dans props : " + this.text);
-        this.value = this.text;
-        console.log("valeur de value : " + this.value);
+        
 
     }
 }

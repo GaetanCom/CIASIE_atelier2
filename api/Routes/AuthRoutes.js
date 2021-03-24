@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bodyParser = require("body-parser");
+const passwordHash = require('password-hash');
 
 //router.use(bodyParser.urlencoded({ extended: false }));
 //router.use(bodyParser.json());
@@ -8,13 +9,11 @@ const bodyParser = require("body-parser");
 const bdd = require("../utils/DBclients");
 const { json } = require('body-parser');
 
-router.get("/", async (req, res, next)=>{
+router.get("/", async (req, res, next) => {
 
     try {
         const allUsers = await bdd.query('SELECT * FROM Members');
         let data = [];
-
-        console.log(allUsers);
 
         allUsers.forEach(element => {
             data.push({
@@ -26,54 +25,79 @@ router.get("/", async (req, res, next)=>{
                 "password":element.password
             })
         });
-        res.json(data);
+        return res.json(data);
     } catch(err) {
         console.error(err);
         throw new Error(err);
     }
-})
-
-router.get('/:id', (req, res) => {
-    bdd.query('SELECT * FROM Members WHERE id=?', [req.params.id], function (err, rows, fields) {
-        if (err) throw err;
-        let data = []
-         if (rows.length == 0) {
-             data.push("Il n'y a pas d'utilisateur avec cet id")
-              res.send(data)
-        }
-        data.push({
-            "id": rows[0].id,
-            "firstname": rows[0].firstname,
-            "lastname": rows[0].lastname,
-            "mail": rows[0].mail,
-            "pseudo": rows[0].pseudo,
-            "password": rows[0].password
-        })
-        res.send(data)
-       
-    })
 });
 
-// router.post("/connection/signup", (req,res) => {
-//     console.log(req.body);
-//     let firstname = req.body.firstname
-//     let lastname = req.body.lastname
-//     let mail = req.body.mail
-//     let pseudo = req.body.pseudo
-//     let password=req.body.password
-//      var sql = "INSERT INTO Members (firstname,lastname,mail,pseudo,password) VALUES (?,?,?,?,?)";
-//     bdd.query(sql, [firstname,lastname,mail,pseudo,password],function (err, result) {
+router.get('/:id', async (req, res, next) => {
 
-//         if (err) {
-//             throw err;
-//             res.json(false)
-//     }
-//         console.log("1 record inserted");
-//           res.json(true)
-//   });
-  
+    const idUser = req.params.id;
+    let data = [];
+
+    try {
+        let oneUser = await bdd.query('SELECT * FROM Members WHERE id=' + idUser);
+
+
+        if (oneUser.length === 0) {
+            data.push({
+                "message": "No User found"
+            })
+            return res.send(data);
+        }
+        
+        oneUser = oneUser[0];
+
+        data.push({
+            "id": oneUser.id,
+            "firstname": oneUser.firstname,
+            "lastname": oneUser.lastname,
+            "mail": oneUser.mail,
+            "pseudo": oneUser.pseudo,
+            "password": oneUser.password
+        })
+        return res.send(data);
+        
+    } catch(err) {
+        console.log(err);
+        throw new Error(err);
+    }
+});
+
+router.post("/connection/signup", async (req, res, next) => {
+    console.log("TEST");
+    console.log(req.body);
+    let firstname = req.body.firstname;
+    let lastname  = req.body.lastname;
+    let mail      = req.body.mail;
+    let pseudo    = req.body.pseudo;
+    let password  = passwordHash.generate(req.body.password);
+    var sql = "INSERT INTO Members (id, firstname, lastname, mail, pseudo, password) VALUES (null, '"
+        + firstname + "', '"
+        + lastname + "', '"
+        + mail + "', '"
+        + pseudo + "', '"
+        + password + "');";
+
+    try {
+        let createUser = await bdd.query(sql);
+
+        const response = {
+            "id": createUser.insertId,
+            "firstname": firstname,
+            "lastname": lastname,
+            "mail": mail,
+            "pseudo": pseudo,
+        }
+        return res.status(201).json(response);
+    } catch(err) {
+        console.log(err);
+        throw new Error(err);
+    }
     
-// })
+})
 
 // router.get('/connection/checkRegistered', (req, res) => {
 //     let login = req.query.login

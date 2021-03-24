@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require("body-parser");
 const NodeGeocoder = require('node-geocoder');
-const mysql = require('mysql2');
 
 const bdd = require("../utils/DBclients");
 const { json } = require('body-parser');
@@ -51,6 +50,8 @@ router.get('/', async(req, res, next) => {
     }
 
 })
+
+router.get(':/url')
 
 router.post('/', async(req, res, next) => {
 

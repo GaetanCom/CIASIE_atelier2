@@ -23,7 +23,7 @@ CREATE TABLE Members
     mail VARCHAR(255),
     pseudo VARCHAR(255),
     password VARCHAR(255),
-    CONSTRAINT AK_pseudo UNIQUE(pseudo)
+    CONSTRAINT AK_pseudo UNIQUE(pseudo),
     id_status INT
 )ENGINE=InnoDB;
 

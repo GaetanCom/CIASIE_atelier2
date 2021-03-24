@@ -1,4 +1,4 @@
-INSERT INTO Members (id, label) VALUES
+INSERT INTO Status (id, label) VALUES
 (1, 'Administrator'),
 (2, 'Member')
 

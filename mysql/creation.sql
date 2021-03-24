@@ -1,3 +1,9 @@
+CREATE TABLE Status
+(
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    label VARCHAR(255)
+)ENGINE=InnoDB;
+
 CREATE TABLE Address
 (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -18,6 +24,7 @@ CREATE TABLE Members
     pseudo VARCHAR(255),
     password VARCHAR(255),
     CONSTRAINT AK_pseudo UNIQUE(pseudo)
+    id_status INT
 )ENGINE=InnoDB;
 
 CREATE TABLE Events
@@ -47,6 +54,9 @@ CREATE TABLE Messages
     id_member INT,
     id_event INT
 )ENGINE=InnoDB;
+
+ALTER TABLE Members
+ADD CONSTRAINT fk_member_status FOREIGN KEY (id_status) REFERENCES Status(id);
 
 ALTER TABLE Events
 ADD CONSTRAINT fk_event_creator FOREIGN KEY (id_creator) REFERENCES Members(id);

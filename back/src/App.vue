@@ -1,60 +1,109 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+    <img src="src/assets/logo_reunionou.png">
+
+    <div class="nav">
+      <ul class="menu">
+        <router-link class="link" v-if="authenticated" to="/login" v-on:click.native="logout()" replace  title="Déconnexion"><span class="icon-cancel-circle" title="Déconnexion"></span></router-link>
+        <router-link class="link" v-if="authenticated" to="/home" title="Accueil"><span class="icon-home" title="Accueil"></span></router-link>
+        <router-link class="link" v-if="authenticated" to="/users"  title="Utilisateurs"><span class="icon-users" title="Utilisateurs"></span></router-link>
+        <router-link class="link" v-if="authenticated" to="/events" title="Évènements"><span class="icon-calendar" title="Évènements"></span></router-link>
+      </ul>
+
+    </div>
+    <router-view @authenticated="setAuthenticated" />
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+  export default {
+    name: 'App',
+    data() {
+      return {
+        authenticated: false,
+
+      }
+    },
+    mounted() {
+      if(!this.authenticated) {
+        this.$router.replace({ name: "login" });
+      }
+    },
+    methods: {
+      setAuthenticated(status) {
+        this.authenticated = status;
+      },
+      logout() {
+        this.authenticated = false;
+      }
     }
   }
-}
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  body {
+    background-color: white;
+  }
 
-h1, h2 {
-  font-weight: normal;
-}
+  h1, h2, h3{
+    color: deepskyblue;
+  }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
+  .nav ul {
+    margin: 20px auto;
+    padding: 0px;
+    background-color: rgb(241,241,241);
+    list-style:none;
+    font-size: 22px;
+  }
 
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
+  .nav a {
+    padding: 1em;
+    display: block;
+    text-align:center;
+    text-decoration: none;
+    color:black;
+    font-family: sans-serif;
+  }
+  .nav a:hover {
+    background-color: deepskyblue;
 
-a {
-  color: #42b983;
-}
+  }
+  .nav .menu {
+    display: flex; /*1*/
+    flex-direction : row; /*2*/
+    justify-content: center; /*3*/
+  }
+
+  @media(max-width: 750px) {
+    .nav .menu{
+      flex-flow: column wrap; /*4*/
+    }
+    .nav ul {
+      margin: 20px auto;
+
+    }
+
+  }
+
+  #app {
+    margin: 50px auto 50px auto;
+    text-align: center;
+  }
+
+  .icon-home:before {
+     content: "\e900";
+   }
+
+  .icon-users:before {
+    content: "\e972";
+  }
+
+  .icon-calendar:before {
+    content: "\e953";
+  }
+
+  .icon-cancel-circle:before {
+    content: "\ea0d";
+  }
 </style>

@@ -11,11 +11,9 @@ Vue.use(VueRouter);
 const router = new VueRouter({
   mode:'history',
   routes:[
-    {
-      path: "/", component:HomePage,
-      path: "/events", component: EventsPage,
-      path: "/create", component: CreateEventPage,
-    }
+      {path: "/", component: HomePage},
+      {path: "/events", component: EventsPage},
+      {path: "/create", component: CreateEventPage}
   ]
 })
 

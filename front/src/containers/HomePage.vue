@@ -2,7 +2,7 @@
     <div class="Saisie">
         <Input placeholder="login" id="nom" type="text" value="" ref="login"> </Input>
         <br>
-        <Input placeholder="Mot de passe" id="mdp" type="password" :sendInfo="sendInfoHandler" ref="password"> </Input>
+        <Input placeholder="Mot de passe" id="mdp" type="password" ref="password"> </Input>
         <br>
         <Button buttonName="se connecter" :sendInfo="sendInfoHandler"></Button>
     </div>

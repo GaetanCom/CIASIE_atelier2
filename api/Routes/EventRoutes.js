@@ -51,7 +51,7 @@ router.get('/', async(req, res, next) => {
 
 })
 
-router.get(':/url')
+// router.get(':/url')
 
 router.post('/', async(req, res, next) => {
 

@@ -27,7 +27,13 @@ export default {
 
         }
     },
-    components:{Input,Button}
+    components:{Input,Button},
+
+    methods:{
+        sendInfoInscription(){
+            
+        }
+    }
     
 }
 

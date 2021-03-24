@@ -1,13 +1,16 @@
 <template>
   <div id="app">
-    <img src="./assets/logo_reunionou.png" alt="">
+    <Navigation />
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+import Navigation from './components/navigation/Navigation';
+
 export default {
   name: 'app',
+  components: {Navigation},
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
@@ -17,13 +20,17 @@ export default {
 </script>
 
 <style>
+body {
+  background: #66d1e7;
+  margin: 0;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 
 h1, h2 {

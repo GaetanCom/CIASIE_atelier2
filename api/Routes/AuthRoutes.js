@@ -2,9 +2,8 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require("body-parser");
 const passwordHash = require('password-hash');
+const bcrypt = require('bcrypt');
 
-//router.use(bodyParser.urlencoded({ extended: false }));
-//router.use(bodyParser.json());
 
 const bdd = require("../utils/DBclients");
 const { json } = require('body-parser');
@@ -67,7 +66,6 @@ router.get('/:id', async (req, res, next) => {
 });
 
 router.post("/connection/signup", async (req, res, next) => {
-    console.log("TEST");
     console.log(req.body);
     let firstname = req.body.firstname;
     let lastname  = req.body.lastname;
@@ -99,28 +97,44 @@ router.post("/connection/signup", async (req, res, next) => {
     
 })
 
-// router.get('/connection/checkRegistered', (req, res) => {
-//     let login = req.query.login
-//     let pwd = req.query.pwd
-//    bdd.query('SELECT * FROM Members WHERE pseudo=? AND password=?', [login,pwd], function (err, rows, fields) {
-//         if (err) throw err;
-//        if (!rows.length == 0) {
-//            res.json({
-//                "id": rows[0].id,
-//                "firstname": rows[0].firstname,
-//                "lastname": rows[0].lastname,
-//                "mail": rows[0].mail,
-//                "pseudo": rows[0].pseudo,
-//                "password": rows[0].password
-//            })
-//        } else {
-//            res.json(-1)
-//         }
-       
-  
-//     })
-// return 	
-// });
+router.get('/connection/checkRegistered', async (req, res, next) => {
+    let login = req.query.login;
+    let pwd = req.query.pwd;
+
+    let sqlReq = "SELECT * FROM Members WHERE pseudo='" + login + "'";
+    let responseJson
+    try {
+        let user = await bdd.all(sqlReq);
+        if(user.length !== 0) {
+            const password = user[0].password;
+
+            if(passwordHash.verify(pwd, password)) {
+                user = user[0];
+                responseJson = {
+                    "id": user.id,
+                    "firstname": user.firstname,
+                    "lastname": user.lastname,
+                    "mail": user.mail,
+                    "pseudo": user.pseudo
+                }
+            } else {    
+                responseJson = {
+                    "message": "Wrong password"
+                }
+            }
+        } else {
+            responseJson = {
+                "message": "No user found"
+            }
+        }
+
+        return res.json(responseJson)
+    } catch (err) {
+        console.log(err);
+        throw new Error(err);
+    }
+
+});
 
 // router.post("/update/firstname", (req, res)=> {
 //     let newFirstName = req.body.firstname

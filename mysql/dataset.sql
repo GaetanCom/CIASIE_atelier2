@@ -1,6 +1,6 @@
 INSERT INTO Status (id, label) VALUES
 (1, 'Administrator'),
-(2, 'Member')
+(2, 'Member');
 
 INSERT INTO Members (id, pseudo, password, firstname, lastname, mail, id_status) VALUES
 (1, 'Admin', 'Admin123', 'Admin', 'Admin', 'Admin@gmail.com', 1),

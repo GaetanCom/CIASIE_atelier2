@@ -8,7 +8,7 @@
                 class="navigation_logo" />
         </a>
         <li>
-            <ul> <a :href="'/events'">Événements</a> </ul>
+            <ul> <router-link to="/events">Événements</router-link> </ul>
         </li>
     </nav>
     

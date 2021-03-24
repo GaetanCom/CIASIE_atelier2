@@ -1,13 +1,12 @@
 <template>
   <div id="app">
     <Navigation />
-    
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Navigation from './components/navigation/Navigation';
+import Navigation from './components/navigation/Navigation.vue';
 
 export default {
   name: 'app',

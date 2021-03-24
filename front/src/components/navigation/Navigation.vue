@@ -9,6 +9,7 @@
         </a>
         <li>
             <ul> <a :href="'/events'">Événements</a> </ul>
+            <ul> <a :href="'/register'">inscrptions</a> </ul>
         </li>
     </nav>
     

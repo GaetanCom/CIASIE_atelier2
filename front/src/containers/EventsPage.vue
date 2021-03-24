@@ -12,6 +12,10 @@
 
 <script>
 export default {
+
+    created(){
+        console.log("je cree la page Events")
+    }
     
 }
 </script>

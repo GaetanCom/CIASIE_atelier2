@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require("body-parser");
 const passwordHash = require('password-hash');
-const bcrypt = require('bcrypt');
 
 
 const bdd = require("../utils/DBclients");
@@ -136,69 +135,129 @@ router.get('/connection/checkRegistered', async (req, res, next) => {
 
 });
 
-// router.post("/update/firstname", (req, res)=> {
-//     let newFirstName = req.body.firstname
-//     let id = req.body.id
-//     bdd.query("UPDATE Members SET firstname=? WHERE id=?", [newFirstName, id], function (err, row, fields) {
-//         if (err) {
-//               throw err;
-//               res.json(false)
-//           } 
+router.post("/update/firstname", async (req, res, next) => {
+    let newFirstName = req.body.firstname;
+    let id = req.body.id;
 
-//        res.json(true)
-//     })
-// })
+    let requeteSQL = "UPDATE Members SET firstname='"+  newFirstName +"' WHERE id=" + id;
 
-// router.post("/update/lastname", (req, res)=> {
-//     let newLastname = req.body.lastname
-//     let id = req.body.id
-//     bdd.query("UPDATE Members SET lastname=? WHERE id=?", [newLastname, id], function (err, row, fields) {
-//         if (err) {
-//               throw err;
-//               res.json(false)
-//           } 
+    try {
+        let newUser = await bdd.query(requeteSQL);
 
-//        res.json(true)
-//     })
-// })
+        return res.json({
+            "id": id,
+            "firstname": newFirstName
+        })
+    } catch(err) {
+        console.log(err);
+        
+        return res.json({
+            "message": "ERROR"
+        })
+    }
+})
 
-// router.post("/update/mail", (req, res)=> {
-//     let newMail = req.body.mail
-//     let id = req.body.id
-//     bdd.query("UPDATE Members SET mail=? WHERE id=?", [newMail, id], function (err, row, fields) {
-//         if (err) {
-//               throw err;
-//               res.json(false)
-//           } 
+router.post("/update/lastname", async (req, res, next)=> {
+    let newLastName = req.body.lastname;
+    let id = req.body.id;
 
-//        res.json(true)
-//     })
-// })
+    let requeteSQL = "UPDATE Members SET lastname='"+  newLastName +"' WHERE id=" + id;
 
-// router.post("/update/pseudo", (req, res)=> {
-//     let newPseudo = req.body.pseudo
-//     let id = req.body.id
-//     bdd.query("UPDATE Members SET pseudo=? WHERE id=?", [newPseudo, id], function (err, row, fields) {
-//         if (err) {
-//               throw err;
-//               res.json(false)
-//           } 
+    try {
+        let newUser = await bdd.query(requeteSQL);
 
-//        res.json(true)
-//     })
-// })
+        return res.json({
+            "id": id,
+            "lastname": newLastName
+        })
+    } catch(err) {
+        console.log(err);
+        
+        return res.json({
+            "message": "ERROR"
+        })
+    }
+})
 
-// router.post("/update/password", (req, res)=> {
-//     let newPassword = req.body.password
-//     let id = req.body.id
-//     bdd.query("UPDATE Members SET password=? WHERE id=?", [newPassword, id], function (err, row, fields) {
-//         if (err) {
-//               throw err;
-//               res.json(false)
-//           } 
+router.post("/update/mail", async (req, res, next)=> {
+    let newMail = req.body.mail;
+    let id = req.body.id;
 
-//        res.json(true)
-//     })
-// })
+    let requeteSQL = "UPDATE Members SET mail='"+  newMail +"' WHERE id=" + id;
+
+    try {
+        let newUser = await bdd.query(requeteSQL);
+
+        return res.json({
+            "id": id,
+            "mail": newMail
+        })
+    } catch(err) {
+        console.log(err);
+        
+        return res.json({
+            "message": "ERROR"
+        })
+    }
+})
+
+router.post("/update/pseudo", async (req, res, next)=> {
+    let newPseudo = req.body.pseudo;
+    let id = req.body.id;
+
+    let requeteSQL = "UPDATE Members SET pseudo='"+  newPseudo +"' WHERE id=" + id;
+    console.log(requeteSQL);
+
+    try {
+        let newUser = await bdd.query(requeteSQL);
+
+        return res.json({
+            "id": id,
+            "pseudo": newPseudo
+        })
+    } catch(err) {
+        console.log(err);
+        
+        return res.json({
+            "message": "ERROR"
+        })
+    }
+})
+
+router.post("/update/password", async (req, res, next)=> {
+    let newpassword = req.body.newpassword;
+    let oldpassword = req.body.oldpassword;
+    let id = req.body.id;
+
+    try {
+        let sqlfindUser = "SELECT * FROM Members WHERE id="+id
+        let findUser = await bdd.all(sqlfindUser);
+
+
+        if(passwordHash.verify(oldpassword, findUser[0].password)) {
+            let requeteSQL = "UPDATE Members SET password='"+  passwordHash.generate(newpassword) +"' WHERE id=" + id + ";";
+            let newUser = await bdd.query(requeteSQL);
+            
+
+            return res.status(201).json({
+                "id": id
+            })
+            
+        } else {
+            return res.json({
+                "message": "WRONG OLD PASSWORD"
+            })
+        }
+
+
+    } catch(err) {
+        console.log(err);
+        
+        return res.json({
+            "message": "ERROR"
+        })
+    }
+
+})
 
 module.exports = router;

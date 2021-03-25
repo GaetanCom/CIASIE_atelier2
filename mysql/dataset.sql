@@ -12,7 +12,7 @@ INSERT INTO Members (idMembers, pseudo, password, firstname, lastname, mail, las
 (7, 'Jbb',  'sha1$2e4c830f$1$097baa5603c231d1f09d691506b9657f56ca4316', 'Jean-Baptiste', 'Bernard', 'Jbbernard@gmail.com', '24/03/2021/18:00', 2),
 (8, 'inactif',  'sha1$2e4c830f$1$097baa5603c231d1f09d691506b9657f56ca4316', 'inactif', 'inactif', 'inactif@gmail.com', '24/03/2020/18:00', 2);
 
-INSERT INTO Address (idAdress, number, street, zipcode, country) VALUES
+INSERT INTO Address (idAddress, number, street, zipcode, country) VALUES
 (1, '27', 'Grande Rue', 54000, 'France'),
 (2, '16',  'Rue Saint-Georges', 54000, 'France'),
 (3, '10',  'Rue de Villers', 54000, 'France'),

@@ -1,7 +1,7 @@
 <template>
     <div class="Saisie">
         <div class="alert" v-if="this.alert !== '' ">
-            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            <span class="closebtn" v-on:click="supprimerAlert">&times;</span>
                 {{ this.alert }}
         </div>
         <div>
@@ -24,7 +24,8 @@ export default {
     
     data(){
         return{
-            adresseApi: "http://docketu.iutnc.univ-lorraine.fr:13003/users/connection/checkRegistered?login=",
+            // adresseApi: "http://docketu.iutnc.univ-lorraine.fr:13003/users/connection/checkRegistered?login=",
+            adresseApi: "http://localhost:19080/users/connection/checkRegistered?login=",
             connecter: '',
             alert: '',
             connection: false,
@@ -64,8 +65,12 @@ export default {
                 // this.$refs.login._data.value = mail;
             }
 
+        },
+        supprimerAlert(){
+            this.alert = '';
         }
     },
+    
     created(){
         console.log("je creer la homepage")
     }

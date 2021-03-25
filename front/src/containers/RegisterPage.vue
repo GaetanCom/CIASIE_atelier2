@@ -1,7 +1,7 @@
 <template>
     <div id="inscriptions">
         <div class="alert" v-if="this.alert !== '' ">
-            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            <span class="closebtn" v-on:click="supprimerAlert">&times;</span>
                 {{ this.alert }}
         </div>
         <Input  placeholder="prénom" id="prenom" type="text" value="" ref="firstname"> </Input>
@@ -29,7 +29,8 @@ export default {
 
     data(){
         return{
-            adresseApi: "http://docketu.iutnc.univ-lorraine.fr:13003/users/connection/signup",
+            // adresseApi: "http://docketu.iutnc.univ-lorraine.fr:13003/users/connection/signup",
+            adresseApi: "http://localhost:19080/users/connection/signup",
             alert: "",
         }
     },
@@ -60,7 +61,7 @@ export default {
                         console.log('Reponse OK');
                         console.log(reponse);
                         if(reponse.data.message){
-                            console.log(reponse.data.message)
+                            console.log(reponse.data.message);
                             this.alert = reponse.data.message;
                         }else{
                             this.connection = true;
@@ -72,11 +73,14 @@ export default {
                     })
                     .finally( () => this.loading = false); 
                 }else{
-                    console.log("mot de passe non identique !")
+                    this.alert = "mot de passe non identique !";
                 }
             }else{
-                console.log("erreur au moins une des chaines est vide");
+                this.alert = "erreur au moins une des chaines est vide";
             }
+        },
+        supprimerAlert(){
+            this.alert = '';
         }
     }
     

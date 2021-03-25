@@ -6,7 +6,7 @@ CREATE TABLE Status
 
 CREATE TABLE Address
 (
-    idAdress INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    idAddress INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     number INT,
     street VARCHAR(255),
     zipcode INT,

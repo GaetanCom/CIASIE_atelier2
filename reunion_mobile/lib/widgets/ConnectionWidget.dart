@@ -24,7 +24,7 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
     var client = new http.Client();
 
     var uri = Uri.parse(
-        "http://192.168.0.10:19080/users/connection/checkRegistered?login=" +
+        "http://docketu.iutnc.univ-lorraine.fr:13003/users/connection/checkRegistered?login=" +
             login +
             "&pwd=" +
             pwd);
@@ -32,18 +32,29 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
     print(uri.port);
 
     client.get(uri).then((response) {
-      if (response.body != "-1") {
-        //print(response.body);
-        var json = jsonDecode(response.body);
+      print(response.body);
+      var json = jsonDecode(response.body);
+
+      if (json["id"] != null) {
+        Global.user = new Member(json["id"], json["firstname"],
+            json["lastName"], json["mail"], json["pseudo"], json["password"]);
+        Navigator.pushNamed(c, "/");
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(json["message"])));
+      }
+
+      /*if (response.body != "-1") {
+      
+        
         Global.user = new Member(json["id"], json["firstname"],
             json["lastName"], json["mail"], json["pseudo"], json["password"]);
 
         Navigator.pushNamed(c, "/");
       } else {
         print("mauvaise connexion");
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Mauvais login ou mot de passe')));
-      }
+        
+      }*/
     });
   }
 

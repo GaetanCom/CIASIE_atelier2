@@ -25,11 +25,11 @@ services:
     container_name: mysql.reunion
     image: mysql:latest
     restart: always
-    # command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8 --collation-server=utf8_general_ci
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8 --collation-server=utf8_general_ci
     env_file: 
       - ./api/.env.dev
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - ./mysql_data:/var/lib/mysql
       - ./mysql:/docker-entrypoint-initdb.d
@@ -41,7 +41,7 @@ services:
     ports: 
       - "8080:80"
     environment: 
-      - ./api/.env.dev
+      - PMA_ARBITRARY=1
     links: 
       - mysql.reunion
   

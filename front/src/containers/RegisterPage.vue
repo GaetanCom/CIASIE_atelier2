@@ -1,7 +1,11 @@
 <template>
     <div id="inscriptions">
         <div class="alert" v-if="this.alert !== '' ">
+<<<<<<< HEAD
             <span class="closebtn" v-on:click="supprimerAlert">&times;</span>
+=======
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+>>>>>>> Arthur
                 {{ this.alert }}
         </div>
         <Input  placeholder="prénom" id="prenom" type="text" value="" ref="firstname"> </Input>
@@ -29,8 +33,12 @@ export default {
 
     data(){
         return{
+<<<<<<< HEAD
             // adresseApi: "http://docketu.iutnc.univ-lorraine.fr:13003/users/connection/signup",
             adresseApi: "http://localhost:19080/users/connection/signup",
+=======
+            adresseApi: "http://docketu.iutnc.univ-lorraine.fr:13003/users/connection/signup",
+>>>>>>> Arthur
             alert: "",
         }
     },
@@ -61,11 +69,18 @@ export default {
                         console.log('Reponse OK');
                         console.log(reponse);
                         if(reponse.data.message){
+<<<<<<< HEAD
                             console.log(reponse.data.message);
                             this.alert = reponse.data.message;
                         }else{
                             this.connection = true;
                             this.$router.push('/');
+=======
+                            console.log(reponse.data.message)
+                            this.alert = reponse.data.message;
+                        }else{
+                            this.connection = true;
+>>>>>>> Arthur
                         }
                     })
                     .catch(error => {
@@ -74,6 +89,7 @@ export default {
                     })
                     .finally( () => this.loading = false); 
                 }else{
+<<<<<<< HEAD
                     this.alert = "mot de passe non identique !";
                 }
             }else{
@@ -82,6 +98,13 @@ export default {
         },
         supprimerAlert(){
             this.alert = '';
+=======
+                    console.log("mot de passe non identique !")
+                }
+            }else{
+                console.log("erreur au moins une des chaines est vide");
+            }
+>>>>>>> Arthur
         }
     }
     

@@ -1,7 +1,11 @@
 <template>
     <div class="Saisie">
         <div class="alert" v-if="this.alert !== '' ">
+<<<<<<< HEAD
             <span class="closebtn" v-on:click="supprimerAlert">&times;</span>
+=======
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+>>>>>>> Arthur
                 {{ this.alert }}
         </div>
         <div>
@@ -24,8 +28,12 @@ export default {
     
     data(){
         return{
+<<<<<<< HEAD
             // adresseApi: "http://docketu.iutnc.univ-lorraine.fr:13003/users/connection/checkRegistered?login=",
             adresseApi: "http://localhost:19080/users/connection/checkRegistered?login=",
+=======
+            adresseApi: "http://docketu.iutnc.univ-lorraine.fr:13003/users/connection/checkRegistered?login=",
+>>>>>>> Arthur
             connecter: '',
             alert: '',
             connection: false,
@@ -53,7 +61,10 @@ export default {
                     this.alert = reponse.data.message;
                 }else{
                     this.connection = true;
+<<<<<<< HEAD
                     this.$router.push('/register');
+=======
+>>>>>>> Arthur
                 }
             })
             .catch(error => {

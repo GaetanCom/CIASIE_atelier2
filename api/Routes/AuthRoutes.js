@@ -141,21 +141,13 @@ router.post("/update/firstname", async (req, res, next) => {
     let newFirstName = req.body.firstname;
     let id = req.body.id;
 
-<<<<<<< HEAD
     let requeteSQL = "UPDATE Members SET firstname='"+  newFirstName +"' WHERE idMembers=" + id;
-=======
-    let requeteSQL = "UPDATE Members SET firstname='"+  newFirstName +"' WHERE id=" + id;
->>>>>>> Arthur
 
     try {
         let newUser = await bdd.query(requeteSQL);
 
         return res.json({
-<<<<<<< HEAD
             "idmembers": id,
-=======
-            "id": id,
->>>>>>> Arthur
             "firstname": newFirstName
         })
     } catch(err) {
@@ -171,21 +163,13 @@ router.post("/update/lastname", async (req, res, next)=> {
     let newLastName = req.body.lastname;
     let id = req.body.id;
 
-<<<<<<< HEAD
     let requeteSQL = "UPDATE Members SET lastname='"+  newLastName +"' WHERE idMembers=" + id;
-=======
-    let requeteSQL = "UPDATE Members SET lastname='"+  newLastName +"' WHERE id=" + id;
->>>>>>> Arthur
 
     try {
         let newUser = await bdd.query(requeteSQL);
 
         return res.json({
-<<<<<<< HEAD
             "idMembers": id,
-=======
-            "id": id,
->>>>>>> Arthur
             "lastname": newLastName
         })
     } catch(err) {
@@ -201,21 +185,13 @@ router.post("/update/mail", async (req, res, next)=> {
     let newMail = req.body.mail;
     let id = req.body.id;
 
-<<<<<<< HEAD
     let requeteSQL = "UPDATE Members SET mail='"+  newMail +"' WHERE idMembers=" + id;
-=======
-    let requeteSQL = "UPDATE Members SET mail='"+  newMail +"' WHERE id=" + id;
->>>>>>> Arthur
 
     try {
         let newUser = await bdd.query(requeteSQL);
 
         return res.json({
-<<<<<<< HEAD
             "idMembers": id,
-=======
-            "id": id,
->>>>>>> Arthur
             "mail": newMail
         })
     } catch(err) {
@@ -231,22 +207,14 @@ router.post("/update/pseudo", async (req, res, next)=> {
     let newPseudo = req.body.pseudo;
     let id = req.body.id;
 
-<<<<<<< HEAD
     let requeteSQL = "UPDATE Members SET pseudo='"+  newPseudo +"' WHERE idMembers=" + id;
-=======
-    let requeteSQL = "UPDATE Members SET pseudo='"+  newPseudo +"' WHERE id=" + id;
->>>>>>> Arthur
     console.log(requeteSQL);
 
     try {
         let newUser = await bdd.query(requeteSQL);
 
         return res.json({
-<<<<<<< HEAD
             "idMembers": id,
-=======
-            "id": id,
->>>>>>> Arthur
             "pseudo": newPseudo
         })
     } catch(err) {
@@ -264,7 +232,6 @@ router.post("/update/password", async (req, res, next)=> {
     let id = req.body.id;
 
     try {
-<<<<<<< HEAD
         let sqlfindUser = "SELECT * FROM Members WHERE idMembers="+id
         let findUser = await bdd.all(sqlfindUser);
 
@@ -285,25 +252,6 @@ router.post("/update/password", async (req, res, next)=> {
             }
         } catch (err) {
             console.log("err");
-=======
-        let sqlfindUser = "SELECT * FROM Members WHERE id="+id
-        let findUser = await bdd.all(sqlfindUser);
-
-
-        if(passwordHash.verify(oldpassword, findUser[0].password)) {
-            let requeteSQL = "UPDATE Members SET password='"+  passwordHash.generate(newpassword) +"' WHERE id=" + id + ";";
-            let newUser = await bdd.query(requeteSQL);
-            
-
-            return res.status(201).json({
-                "id": id
-            })
-            
-        } else {
-            return res.json({
-                "message": "WRONG OLD PASSWORD"
-            })
->>>>>>> Arthur
         }
 
 
@@ -314,7 +262,6 @@ router.post("/update/password", async (req, res, next)=> {
             "message": "ERROR"
         })
     }
-<<<<<<< HEAD
 })
 
 router.post("/delete/member", async (req, res, next)=> {
@@ -335,9 +282,6 @@ router.post("/delete/member", async (req, res, next)=> {
             "message": "ERROR"
         })
     }
-=======
-
->>>>>>> Arthur
 })
 
 module.exports = router;

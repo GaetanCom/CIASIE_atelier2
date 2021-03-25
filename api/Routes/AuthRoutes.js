@@ -70,13 +70,15 @@ router.post("/connection/signup", async (req, res, next) => {
     let lastname  = req.body.lastname;
     let mail      = req.body.mail;
     let pseudo    = req.body.pseudo;
-    let password  = passwordHash.generate(req.body.password);
-    var sql = "INSERT INTO Members (id, firstname, lastname, mail, pseudo, password) VALUES (null, '"
+    let password = passwordHash.generate(req.body.password);
+    let id_status=req.body.id_status
+    var sql = "INSERT INTO Members (id, firstname, lastname, mail, pseudo, password,id_status) VALUES (null, '"
         + firstname + "', '"
         + lastname + "', '"
         + mail + "', '"
         + pseudo + "', '"
-        + password + "');";
+        + password + ",'"
+        + id_status+"');";
 
     try {
         let createUser = await bdd.query(sql);
@@ -106,20 +108,23 @@ router.get('/connection/checkRegistered', async (req, res, next) => {
         let user = await bdd.all(sqlReq);
         if(user.length !== 0) {
             const password = user[0].password;
-
-            if(passwordHash.verify(pwd, password)) {
-                user = user[0];
-                responseJson = {
-                    "id": user.id,
-                    "firstname": user.firstname,
-                    "lastname": user.lastname,
-                    "mail": user.mail,
-                    "pseudo": user.pseudo
+            try {
+                if (passwordHash.verify(pwd, password)) {
+                    user = user[0];
+                    responseJson = {
+                        "id": user.id,
+                        "firstname": user.firstname,
+                        "lastname": user.lastname,
+                        "mail": user.mail,
+                        "pseudo": user.pseudo
+                    }
+                } else {
+                    responseJson = {
+                        "message": "Wrong password"
+                    }
                 }
-            } else {    
-                responseJson = {
-                    "message": "Wrong password"
-                }
+            } catch (err) {
+                console.log(err);
             }
         } else {
             responseJson = {
@@ -233,20 +238,23 @@ router.post("/update/password", async (req, res, next)=> {
         let sqlfindUser = "SELECT * FROM Members WHERE id="+id
         let findUser = await bdd.all(sqlfindUser);
 
-
-        if(passwordHash.verify(oldpassword, findUser[0].password)) {
-            let requeteSQL = "UPDATE Members SET password='"+  passwordHash.generate(newpassword) +"' WHERE id=" + id + ";";
-            let newUser = await bdd.query(requeteSQL);
+        try {
+            if (passwordHash.verify(oldpassword, findUser[0].password)) {
+                let requeteSQL = "UPDATE Members SET password='" + passwordHash.generate(newpassword) + "' WHERE id=" + id + ";";
+                let newUser = await bdd.query(requeteSQL);
             
 
-            return res.status(201).json({
-                "id": id
-            })
+                return res.status(201).json({
+                    "id": id
+                })
             
-        } else {
-            return res.json({
-                "message": "WRONG OLD PASSWORD"
-            })
+            } else {
+                return res.json({
+                    "message": "WRONG OLD PASSWORD"
+                })
+            }
+        } catch (err) {
+            console.log("err");
         }
 
 

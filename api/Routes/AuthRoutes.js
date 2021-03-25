@@ -76,7 +76,7 @@ router.post("/connection/signup", async (req, res, next) => {
         + lastname + "', '"
         + mail + "', '"
         + pseudo + "', '"
-        + password + "', );";
+        + password + "', 2);";
 
     
 

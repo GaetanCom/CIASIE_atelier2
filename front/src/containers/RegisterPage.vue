@@ -65,6 +65,7 @@ export default {
                             this.alert = reponse.data.message;
                         }else{
                             this.connection = true;
+                            this.$router.push('/');
                         }
                     })
                     .catch(error => {

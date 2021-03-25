@@ -53,6 +53,7 @@ export default {
                     this.alert = reponse.data.message;
                 }else{
                     this.connection = true;
+                    this.$router.push('/register');
                 }
             })
             .catch(error => {

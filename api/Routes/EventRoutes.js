@@ -32,7 +32,7 @@ router.get('/', async(req, res, next) => {
         events.forEach(async element => {
             
             dataEvent = {
-                "id": element.id,
+                "id": element.idEvents,
                 "title": element.title,
                 "description": element.description,
                 "date": element.date,
@@ -50,6 +50,46 @@ router.get('/', async(req, res, next) => {
     }
 
 })
+
+router.post('/', async(req, res, next) => {
+
+    const {title, description, date, idCreator, idAddress} = req.body;
+    const members = req.body.members;
+    
+    try {
+        // Vérification que l'URL qui sera attribuée n'existe pas 
+        let existingUrl;
+        do {
+            const url = CreateURL();
+            existingUrl = await bdd.all("SELECT * FROM Events WHERE url="+url);
+        } while(existingUrl.length !== 0);
+
+        const events = await bdd.query(
+            "INSERT INTO Events (idEvents, title, description, date, url, id_address, id_creator) VALUES (null, '"
+            + title + "', '"
+            + description + "', '"
+            + date + "', '"
+            + url + "', "
+            + idAddress + ","
+            + idCreator + ");"
+        );
+    
+        res.status(201).json({
+            idEvents: events.insertId,
+            title: title,
+            description: description,
+            date: date,
+            url: url,
+            idCreator: idCreator,
+            idAddress: idAddress
+        });
+
+    } catch(err) {
+        console.log(err);
+        throw new Error(err);
+    };
+
+});
 
 router.get('/:urlevent', async (req, res, next) => {
 
@@ -126,62 +166,23 @@ router.get('/:urlevent', async (req, res, next) => {
     }
 
 });
+router.post('/:url/member', async (req, res, next) => {
 
-router.post('/', async(req, res, next) => {
-
-    const {title, description, date, idCreator, idAddress} = req.body;
-    const members = req.body.members;
-    
-    try {
-        // Vérification que l'URL qui sera attribuée n'existe pas 
-        let existingUrl;
-        do {
-            const url = CreateURL();
-            existingUrl = await bdd.all("SELECT * FROM Events WHERE url="+url);
-        } while(existingUrl.length !== 0);
-
-        const events = await bdd.query(
-            "INSERT INTO Events (id, title, description, date, url, id_address, id_creator) VALUES (null, '"
-            + title + "', '"
-            + description + "', '"
-            + date + "', '"
-            + url + "', "
-            + idAddress + ","
-            + idCreator + ");"
-        );
-    
-        res.status(201).json({
-            id: events.insertId,
-            title: title,
-            description: description,
-            date: date,
-            url: url,
-            idCreator: idCreator,
-            idAddress: idAddress
-        });
-
-    } catch(err) {
-        console.log(err);
-        throw new Error(err);
-    };
-
-
-});
-
-router.post('/member', async (req, res, next) => {
-
-    const eventId = req.body.eventId;
+    const urlEvent = req.params.url;
     const memberId = req.body.memberId;
 
     try {
-        let request = "INSERT INTO Guests (id, accept, id_event, id_member) VALUES (null, 3, "
-        + eventId + ", " 
+        let events = await bdd.one("SELECT idEvents from Events WHERE url = '" + urlEvent + "';")
+
+        let request = 
+        "INSERT INTO Guests (idGuests, accept, id_event, id_member) VALUES (null, 3, "
+        + events[0].idAddress + ", " 
         + memberId + ");"
 
         const addMember = await bdd.query(request);
 
         res.json({
-            id: addMember.insertId,
+            idMembers: addMember.insertId,
             accept: 3,
             event: eventId,
             member: memberId
@@ -193,6 +194,86 @@ router.post('/member', async (req, res, next) => {
         throw new Error(err);
     }
 });
+
+router.post('/:url/member/:id', async (req, res, next) => {
+
+    let urlEvent = req.params.url;
+    let idMember = req.params.id;
+    let choice = req.body.choice;
+
+    try {
+        let event = await bdd.all("SELECT idEvents from Events WHERE url = '" + urlEvent + "';");
+
+
+        let requestSql = 
+            "UPDATE Guests"
+            + " SET accept = " + choice 
+            + " WHERE id_event = '" + event[0].idEvents 
+            + "' AND id_member = " + idMember;
+
+        console.log(requestSql);
+
+        await bdd.query(requestSql);
+
+        return res.json({
+            "message": "Data Update"
+        })
+        
+
+    } catch(err) {
+        console.log(err);
+        throw new Error(err);
+    }
+
+})
+
+
+router.get('/:url/members', async (req, res, next) => {
+
+    let eventUrl = req.params.url;
+
+    try {
+        let requestListMembers = await bdd.all(
+            "SELECT g.*, m.*, e.* FROM Guests g "
+            + "JOIN Events e ON e.idEvents = g.id_event "
+            + "JOIN Members m ON m.idMembers = g.id_member "
+            + "WHERE e.url = '" + eventUrl + "'"
+        );
+
+        console.log(requestListMembers);
+
+        let jsonRes = {
+            "message": "No Event Found"
+        };
+
+        if(requestListMembers.length >= 1) {
+            let tabMembers = [];
+
+            requestListMembers.forEach(el => {
+                let accept = el.accept === 1 ? "agreed" : el.accept === 2 ? "refused" : "waiting";
+                tabMembers.push({
+                    "idGuests": el.idGuests,
+                    "firstname": el.firstname,
+                    "lastname": el.lastname,
+                    "accept": accept
+                })
+            })
+
+            jsonRes = {
+                tabMembers
+            }
+        } else {
+
+        }
+
+        return res.status(201).json(jsonRes);
+
+    } catch(err) {
+        console.log(err);
+        throw new Error(err);
+    }
+
+})
 
 router.get('/members', async (req, res, next) => {
 
@@ -209,7 +290,7 @@ router.get('/members', async (req, res, next) => {
 
         listMembers.forEach(element => {
             let oneMember = {
-                id: element.id,
+                idMembers: element.idMembers,
                 pseudo: element.pseudo,
             }
             members.push(oneMember);
@@ -254,7 +335,7 @@ router.post('/address', async(req, res, next) => {
         const request = await bdd.query(reqAddress);
 
         return res.status(201).json({
-            id: request.insertId,
+            idAddress: request.insertId,
             number: number,
             street: street,
             zipcode: zipcode,

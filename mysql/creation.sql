@@ -24,6 +24,7 @@ CREATE TABLE Members
     pseudo VARCHAR(255),
     password VARCHAR(255),
     CONSTRAINT AK_pseudo UNIQUE(pseudo),
+    last_connexion VARCHAR(255),
     id_status INT
 )ENGINE=InnoDB;
 

@@ -14,8 +14,8 @@ const options = {
 
 const CreateURL = () => {
     return 'xxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
     });
 }
 
@@ -51,16 +51,95 @@ router.get('/', async(req, res, next) => {
 
 })
 
-// router.get(':/url')
+router.get('/:urlevent', async (req, res, next) => {
+
+    let urlEvent = req.params.urlevent;
+
+    try {
+        let requeteSQLOneEvent = 
+        "SELECT e.* , a.*, c.* "
+        + "FROM Events e "
+        + "JOIN Address a ON a.idAddress = e.id_address " 
+        + "JOIN Members c ON c.idMembers = e.id_creator "
+        + "WHERE e.url = '" + urlEvent + "'";
+
+        console.log(requeteSQLOneEvent);
+
+        let oneEvent = await bdd.all(requeteSQLOneEvent);
+
+        let jsonRes = {
+            "message": "No Event Found"
+        }
+        
+        if(oneEvent.length === 1) {
+            
+            let idEvent = oneEvent[0].idEvents;
+            
+            let requeteSQLListMembers =
+            "SELECT g.*, m.* "
+            + "FROM Guests g "
+            + "JOIN Members m ON m.idMembers = g.id_member "
+            + "WHERE g.id_event = " + idEvent;
+
+            let listMembers = await bdd.all(requeteSQLListMembers);
+
+            if (listMembers.length >= 1) {
+
+                let members = [];
+
+                listMembers.forEach(el => {
+                    let accept = el.accept === 1 ? "agreed" : el.accept === 2 ? "refused" : "waiting";
+
+                    members.push({
+                        "idMember": el.idMembers,
+                        "firstname": el.firstname,
+                        "lastname": el.lastname,
+                        "accept": accept
+                    })
+                })
+
+                jsonRes = {
+                    "event" : {
+                        "idEvent": oneEvent[0].idEvents,
+                        "title": oneEvent[0].title,
+                        "description": oneEvent[0].description,
+                        "date": oneEvent[0].date,
+                        "url": oneEvent[0].url
+                    },
+                    "creator": {
+                        "idCreator": oneEvent[0].idMembers,
+                        "firstname": oneEvent[0].firstname,
+                        "lastname": oneEvent[0].lastname,
+                        "pseudo": oneEvent[0].pseudo
+                    },
+                    "members": members,
+                }
+            }
+
+        } 
+
+        return res.status(201).json(jsonRes);
+
+    } catch(error) {
+        console.error(error);
+        throw new Error(error);
+    }
+
+});
 
 router.post('/', async(req, res, next) => {
 
     const {title, description, date, idCreator, idAddress} = req.body;
     const members = req.body.members;
-
-    const url = CreateURL();
     
     try {
+        // Vérification que l'URL qui sera attribuée n'existe pas 
+        let existingUrl;
+        do {
+            const url = CreateURL();
+            existingUrl = await bdd.all("SELECT * FROM Events WHERE url="+url);
+        } while(existingUrl.length !== 0);
+
         const events = await bdd.query(
             "INSERT INTO Events (id, title, description, date, url, id_address, id_creator) VALUES (null, '"
             + title + "', '"

@@ -15,7 +15,7 @@ router.get("/", async (req, res, next) => {
 
         allUsers.forEach(element => {
             data.push({
-                "id": element.id,
+                "idMembers": element.id,
                 "firstname": element.firstname,
                 "lastname": element.lastname,
                 "mail": element.mail,
@@ -36,7 +36,7 @@ router.get('/:id', async (req, res, next) => {
     let data = [];
 
     try {
-        let oneUser = await bdd.query('SELECT * FROM Members WHERE id=' + idUser);
+        let oneUser = await bdd.query('SELECT * FROM Members WHERE idMembers=' + idUser);
 
 
         if (oneUser.length === 0) {
@@ -49,7 +49,7 @@ router.get('/:id', async (req, res, next) => {
         oneUser = oneUser[0];
 
         data.push({
-            "id": oneUser.id,
+            "idMembers": oneUser.id,
             "firstname": oneUser.firstname,
             "lastname": oneUser.lastname,
             "mail": oneUser.mail,
@@ -72,19 +72,21 @@ router.post("/connection/signup", async (req, res, next) => {
     let pseudo    = req.body.pseudo;
     let password = passwordHash.generate(req.body.password);
     let id_status=req.body.id_status
-    var sql = "INSERT INTO Members (id, firstname, lastname, mail, pseudo, password,id_status) VALUES (null, '"
+    var sql = "INSERT INTO Members (firstname, lastname, mail, pseudo, password,id_status) VALUES ('"
         + firstname + "', '"
         + lastname + "', '"
         + mail + "', '"
         + pseudo + "', '"
-        + password + ",'"
+        + password + "','"
         + id_status+"');";
+
+    
 
     try {
         let createUser = await bdd.query(sql);
 
         const response = {
-            "id": createUser.insertId,
+            "idMembers": createUser.insertId,
             "firstname": firstname,
             "lastname": lastname,
             "mail": mail,
@@ -104,6 +106,7 @@ router.get('/connection/checkRegistered', async (req, res, next) => {
 
     let sqlReq = "SELECT * FROM Members WHERE pseudo='" + login + "'";
     let responseJson
+
     try {
         let user = await bdd.all(sqlReq);
         if(user.length !== 0) {
@@ -112,7 +115,7 @@ router.get('/connection/checkRegistered', async (req, res, next) => {
                 if (passwordHash.verify(pwd, password)) {
                     user = user[0];
                     responseJson = {
-                        "id": user.id,
+                        "idMembers": user.idMembers,
                         "firstname": user.firstname,
                         "lastname": user.lastname,
                         "mail": user.mail,
@@ -144,13 +147,13 @@ router.post("/update/firstname", async (req, res, next) => {
     let newFirstName = req.body.firstname;
     let id = req.body.id;
 
-    let requeteSQL = "UPDATE Members SET firstname='"+  newFirstName +"' WHERE id=" + id;
+    let requeteSQL = "UPDATE Members SET firstname='"+  newFirstName +"' WHERE idMembers=" + id;
 
     try {
         let newUser = await bdd.query(requeteSQL);
 
         return res.json({
-            "id": id,
+            "idmembers": id,
             "firstname": newFirstName
         })
     } catch(err) {
@@ -166,13 +169,13 @@ router.post("/update/lastname", async (req, res, next)=> {
     let newLastName = req.body.lastname;
     let id = req.body.id;
 
-    let requeteSQL = "UPDATE Members SET lastname='"+  newLastName +"' WHERE id=" + id;
+    let requeteSQL = "UPDATE Members SET lastname='"+  newLastName +"' WHERE idMembers=" + id;
 
     try {
         let newUser = await bdd.query(requeteSQL);
 
         return res.json({
-            "id": id,
+            "idMembers": id,
             "lastname": newLastName
         })
     } catch(err) {
@@ -188,13 +191,13 @@ router.post("/update/mail", async (req, res, next)=> {
     let newMail = req.body.mail;
     let id = req.body.id;
 
-    let requeteSQL = "UPDATE Members SET mail='"+  newMail +"' WHERE id=" + id;
+    let requeteSQL = "UPDATE Members SET mail='"+  newMail +"' WHERE idMembers=" + id;
 
     try {
         let newUser = await bdd.query(requeteSQL);
 
         return res.json({
-            "id": id,
+            "idMembers": id,
             "mail": newMail
         })
     } catch(err) {
@@ -210,14 +213,14 @@ router.post("/update/pseudo", async (req, res, next)=> {
     let newPseudo = req.body.pseudo;
     let id = req.body.id;
 
-    let requeteSQL = "UPDATE Members SET pseudo='"+  newPseudo +"' WHERE id=" + id;
+    let requeteSQL = "UPDATE Members SET pseudo='"+  newPseudo +"' WHERE idMembers=" + id;
     console.log(requeteSQL);
 
     try {
         let newUser = await bdd.query(requeteSQL);
 
         return res.json({
-            "id": id,
+            "idMembers": id,
             "pseudo": newPseudo
         })
     } catch(err) {
@@ -235,17 +238,17 @@ router.post("/update/password", async (req, res, next)=> {
     let id = req.body.id;
 
     try {
-        let sqlfindUser = "SELECT * FROM Members WHERE id="+id
+        let sqlfindUser = "SELECT * FROM Members WHERE idMembers="+id
         let findUser = await bdd.all(sqlfindUser);
 
         try {
             if (passwordHash.verify(oldpassword, findUser[0].password)) {
-                let requeteSQL = "UPDATE Members SET password='" + passwordHash.generate(newpassword) + "' WHERE id=" + id + ";";
+                let requeteSQL = "UPDATE Members SET password='" + passwordHash.generate(newpassword) + "' WHERE idMembers=" + id + ";";
                 let newUser = await bdd.query(requeteSQL);
             
 
                 return res.status(201).json({
-                    "id": id
+                    "idMembers": id
                 })
             
             } else {

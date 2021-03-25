@@ -62,7 +62,7 @@ ADD CONSTRAINT fk_member_status FOREIGN KEY (id_status) REFERENCES Status(idStat
 ALTER TABLE Events
 ADD CONSTRAINT fk_event_creator FOREIGN KEY (id_creator) REFERENCES Members(idMembers);
 ALTER TABLE Events
-ADD CONSTRAINT fk_event_address FOREIGN KEY (id_address) REFERENCES Address(idAdress);
+ADD CONSTRAINT fk_event_address FOREIGN KEY (id_address) REFERENCES Address(idAddress);
 
 ALTER TABLE Guests
 ADD CONSTRAINT fk_guest_event FOREIGN KEY (id_event) REFERENCES Events(idEvents);

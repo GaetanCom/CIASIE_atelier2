@@ -71,14 +71,12 @@ router.post("/connection/signup", async (req, res, next) => {
     let mail      = req.body.mail;
     let pseudo    = req.body.pseudo;
     let password = passwordHash.generate(req.body.password);
-    let id_status=req.body.id_status
     var sql = "INSERT INTO Members (firstname, lastname, mail, pseudo, password,id_status) VALUES ('"
         + firstname + "', '"
         + lastname + "', '"
         + mail + "', '"
         + pseudo + "', '"
-        + password + "','"
-        + id_status+"');";
+        + password + "', 1);";
 
     
 

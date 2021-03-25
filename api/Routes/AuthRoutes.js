@@ -26,7 +26,6 @@ router.get("/", async (req, res, next) => {
         return res.json(data);
     } catch(err) {
         console.error(err);
-        throw new Error(err);
     }
 });
 
@@ -60,7 +59,6 @@ router.get('/:id', async (req, res, next) => {
         
     } catch(err) {
         console.log(err);
-        throw new Error(err);
     }
 });
 
@@ -93,7 +91,6 @@ router.post("/connection/signup", async (req, res, next) => {
         return res.status(201).json(response);
     } catch(err) {
         console.log(err);
-        throw new Error(err);
     }
     
 })
@@ -136,7 +133,6 @@ router.get('/connection/checkRegistered', async (req, res, next) => {
         return res.json(responseJson)
     } catch (err) {
         console.log(err);
-        throw new Error(err);
     }
 
 });

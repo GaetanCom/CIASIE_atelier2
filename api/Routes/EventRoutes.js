@@ -194,6 +194,29 @@ router.post('/member', async (req, res, next) => {
     }
 });
 
+router.get("/createdBy/:id", async (req, res, next) => {
+    let userId = req.params.id
+    try {
+        let sql = "SELECT * FROM Events WHERE id_creator=" + userId
+        let listeEvents = await bdd.query(sql)
+        console.log(listeEvents);
+        let events=[]
+        listeEvents.forEach(el => {
+            events.push({
+                "id": el.id,
+                "title": el.title,
+                "description": el.description,
+                "date": el.date,
+                "url": el.url,
+                "id_adress": el.id_adress
+            })
+        })
+        res.json({ "events": events })
+    } catch (err) {
+        console.log(err);
+    }
+})
+
 router.get('/members', async (req, res, next) => {
 
     let pseudo = req.query.p;

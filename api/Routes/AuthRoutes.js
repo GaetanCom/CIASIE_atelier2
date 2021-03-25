@@ -268,7 +268,26 @@ router.post("/update/password", async (req, res, next)=> {
             "message": "ERROR"
         })
     }
+})
 
+router.post("/delete/member", async (req, res, next)=> {
+    let id = req.body.id;
+
+    let requeteSQL = "DELETE FROM Members WHERE idMembers=" + id;
+
+    try {
+        let deleteUser = await bdd.query(requeteSQL);
+
+        return res.json({
+            "message": "SUCCESS"
+        })
+    } catch(err) {
+        console.log(err);
+        
+        return res.json({
+            "message": "ERROR"
+        })
+    }
 })
 
 module.exports = router;

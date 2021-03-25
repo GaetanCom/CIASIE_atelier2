@@ -270,7 +270,7 @@ router.post("/update/password", async (req, res, next)=> {
     }
 })
 
-router.post("/delete/id", async (req, res, next)=> {
+router.post("/delete/member", async (req, res, next)=> {
     let id = req.body.id;
 
     let requeteSQL = "DELETE FROM Members WHERE idMembers=" + id;

@@ -1,12 +1,12 @@
 CREATE TABLE Status
 (
-    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    idStatus INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     label VARCHAR(255)
 )ENGINE=InnoDB;
 
 CREATE TABLE Address
 (
-    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    idAdress INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     number INT,
     street VARCHAR(255),
     zipcode INT,
@@ -17,7 +17,7 @@ CREATE TABLE Address
 
 CREATE TABLE Members
 (
-    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    idMembers INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     firstname VARCHAR(255),
     lastname VARCHAR(255),
     mail VARCHAR(255),
@@ -30,7 +30,7 @@ CREATE TABLE Members
 
 CREATE TABLE Events
 (
-    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    idEvents INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     title VARCHAR(255),
     description VARCHAR(255),
     date VARCHAR(255),
@@ -41,7 +41,7 @@ CREATE TABLE Events
 
 CREATE TABLE Guests
 (
-    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    idGuests INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     accept INT,
     id_event INT,
     id_member INT
@@ -49,7 +49,7 @@ CREATE TABLE Guests
 
 CREATE TABLE Messages
 (
-    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    idMessages INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     text VARCHAR(255),
     date VARCHAR(255),
     id_member INT,
@@ -57,19 +57,19 @@ CREATE TABLE Messages
 )ENGINE=InnoDB;
 
 ALTER TABLE Members
-ADD CONSTRAINT fk_member_status FOREIGN KEY (id_status) REFERENCES Status(id);
+ADD CONSTRAINT fk_member_status FOREIGN KEY (id_status) REFERENCES Status(idStatus);
 
 ALTER TABLE Events
-ADD CONSTRAINT fk_event_creator FOREIGN KEY (id_creator) REFERENCES Members(id);
+ADD CONSTRAINT fk_event_creator FOREIGN KEY (id_creator) REFERENCES Members(idMembers);
 ALTER TABLE Events
-ADD CONSTRAINT fk_event_address FOREIGN KEY (id_address) REFERENCES Address(id);
+ADD CONSTRAINT fk_event_address FOREIGN KEY (id_address) REFERENCES Address(idAdress);
 
 ALTER TABLE Guests
-ADD CONSTRAINT fk_guest_event FOREIGN KEY (id_event) REFERENCES Events(id);
+ADD CONSTRAINT fk_guest_event FOREIGN KEY (id_event) REFERENCES Events(idEvents);
 ALTER TABLE Guests
-ADD CONSTRAINT fk_guest_member FOREIGN KEY (id_member) REFERENCES Members(id);
+ADD CONSTRAINT fk_guest_member FOREIGN KEY (id_member) REFERENCES Members(idMembers);
 
 ALTER TABLE Messages
-ADD CONSTRAINT fk_message_member FOREIGN KEY (id_member) REFERENCES Members(id);
+ADD CONSTRAINT fk_message_member FOREIGN KEY (id_member) REFERENCES Members(idMembers);
 ALTER TABLE Messages
-ADD CONSTRAINT fk_message_event FOREIGN KEY (id_event) REFERENCES Events(id);
+ADD CONSTRAINT fk_message_event FOREIGN KEY (id_event) REFERENCES Events(idEvents);

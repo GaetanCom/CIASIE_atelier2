@@ -1,11 +1,11 @@
 <template>
-    <input 
+    <b-form-input
         :id="id" 
         :placeholder="placeholder"
         :type="type" 
         :value="value"
         @keyup.enter="sendInfo"
-        v-model="donnee" />
+        v-model="donnee" > </b-form-input>
 </template>
 
 <script>

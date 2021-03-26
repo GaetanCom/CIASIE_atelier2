@@ -1,5 +1,8 @@
 <template>
-    <button v-on:click="sendInfo"> {{ buttonName }} </button>
+    <button 
+        v-on:click="sendInfo"> 
+        {{ buttonName }} 
+        </button>
 </template>
 
 <script>

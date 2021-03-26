@@ -65,11 +65,11 @@ ALTER TABLE Events
 ADD CONSTRAINT fk_event_address FOREIGN KEY (id_address) REFERENCES Address(idAddress);
 
 ALTER TABLE Guests
-ADD CONSTRAINT fk_guest_event FOREIGN KEY (id_event) REFERENCES Events(idEvents);
+ADD CONSTRAINT fk_guest_event FOREIGN KEY (id_event) REFERENCES Events(idEvents) ON DELETE CASCADE;
 ALTER TABLE Guests
-ADD CONSTRAINT fk_guest_member FOREIGN KEY (id_member) REFERENCES Members(idMembers);
+ADD CONSTRAINT fk_guest_member FOREIGN KEY (id_member) REFERENCES Members(idMembers) ON DELETE CASCADE;
 
 ALTER TABLE Messages
-ADD CONSTRAINT fk_message_member FOREIGN KEY (id_member) REFERENCES Members(idMembers);
+ADD CONSTRAINT fk_message_member FOREIGN KEY (id_member) REFERENCES Members(idMembers) ON DELETE SET NULL;
 ALTER TABLE Messages
-ADD CONSTRAINT fk_message_event FOREIGN KEY (id_event) REFERENCES Events(idEvents);
+ADD CONSTRAINT fk_message_event FOREIGN KEY (id_event) REFERENCES Events(idEvents) ON DELETE CASCADE;

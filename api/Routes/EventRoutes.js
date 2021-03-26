@@ -394,4 +394,36 @@ router.post("/delete/event", async (req, res, next)=> {
     }
 })
 
+router.get('/byMember/:id', async (req, res, next) => {
+    let idMember = req.params.id;
+    let sqlreq = 'SELECT * FROM Events INNER JOIN Guests ON Events.idEvents = Guests.id_event INNER JOIN Members On Events.id_creator=Members.idMembers WHERE id_member='+idMember;
+    
+    try {
+        const eventsData = await bdd.query(sqlreq);
+        const events = eventsData;
+        
+        let jsonData = [];
+        let dataEvent;
+        
+        events.forEach(async element => {
+            
+            dataEvent = {
+                "id": element.idEvents,
+                "title": element.title,
+                "description": element.description,
+                "date": element.date,
+                "url": element.url,
+                "creator": element.pseudo,
+            }
+
+            jsonData.push(dataEvent);
+        });
+
+        res.send(jsonData);
+    } catch (error) {
+        console.error(error);
+    }
+
+})
+
 module.exports = router;

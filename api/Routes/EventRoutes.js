@@ -152,6 +152,14 @@ router.get('/:urlevent', async (req, res, next) => {
                         "lastname": oneEvent[0].lastname,
                         "pseudo": oneEvent[0].pseudo
                     },
+                    "address" : {
+                        "idAddress": oneEvent[0].idAddress,
+                        "number": oneEvent[0].number,
+                        "street": oneEvent[0].street,
+                        "country": oneEvent[0].country,
+                        "longitude": oneEvent[0].longitude,
+                        "latitude": oneEvent[0].latitude,
+                    },
                     "members": members,
                 }
             }
@@ -372,6 +380,26 @@ router.post('/address', async(req, res, next) => {
         throw new Error(err);
     }
 
+})
+
+router.post("/delete/event", async (req, res, next)=> {
+    let id = req.body.id;
+
+    let requeteSQL = "DELETE FROM Events WHERE idEvents=" + id;
+
+    try {
+        let deleteUser = await bdd.query(requeteSQL);
+
+        return res.json({
+            "message": "SUCCESS"
+        })
+    } catch(err) {
+        console.log(err);
+        
+        return res.json({
+            "message": "ERROR"
+        })
+    }
 })
 
 module.exports = router;

@@ -26,14 +26,18 @@ class Global {
       for (var i = 0; i < json["events"].length; i++) {
         var event = json["events"][i];
         print(event.toString());
-        Global.events.add(new Event(
-            event["idEvents"],
-            event["title"],
-            event["description"],
-            event["url"],
-            event["date"],
-            event["id_address"],
-            Global.user.id));
+        Global.events.add(
+          new Event(
+              event["idEvents"],
+              event["title"],
+              event["description"],
+              event["url"],
+              event["date"],
+              event["id_address"],
+              Global.user.id,
+              48.692054,
+              6.184417),
+        );
       }
       //this.events.addAll(json["events"]);
     });

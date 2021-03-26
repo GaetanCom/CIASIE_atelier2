@@ -8,7 +8,9 @@ class Event {
   String date;
   int id_address;
   int id_creator;
-  Event(i, t, d, u, da, a, c) {
+  double lat;
+  double long;
+  Event(i, t, d, u, da, a, c, la, lo) {
     this.id = i;
     this.title = t;
     this.description = d;
@@ -16,5 +18,7 @@ class Event {
     this.date = da;
     this.id_address = a;
     this.id_creator = c;
+    this.lat = la;
+    this.long = lo;
   }
 }

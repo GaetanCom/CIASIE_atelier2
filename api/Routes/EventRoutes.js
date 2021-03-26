@@ -428,4 +428,74 @@ router.get('/byMember/:id', async (req, res, next) => {
 
 })
 
+
+router.post("/update/address", async (req, res, next)=> {
+    let newNumber = req.body.number;
+    let newStreet = req.body.street;
+    let newZipcode = req.body.zipcode;
+    let newCountry = req.body.country;
+    let newLongitude = req.body.longitude;
+    let newLatitude = req.body.latitude;
+
+    let id = req.body.id;
+
+    let requeteSQL = "UPDATE Address SET number="+  newNumber 
+    + ", street = '" + newStreet
+    + "', zipcode = " + newZipcode
+    +", country = '" + newCountry
+    +"', longitude = " + newLongitude
+    +", latitude = " + newLatitude
+    +" WHERE idAddress = " + id;
+
+    try {
+        let newUser = await bdd.query(requeteSQL);
+
+        return res.json({
+            "idAddress": id,
+            "number": newNumber,
+
+        })
+    } catch(err) {
+        console.log(err);
+        
+        return res.json({
+            "message": "ERROR"
+        })
+    }
+})
+
+router.get("/address/:id", async (req, res, next) => {
+
+    let idAddress = req.params.id;
+    let data = [];
+
+    try {
+        
+        let oneAddress = await bdd.query('SELECT * FROM Address WHERE idAddress=' + idAddress);
+
+        if (oneAddress.length === 0) {
+            data.push({
+                "message": "No Address found"
+            })
+            return res.send(data);
+        }
+        
+        oneAddress = oneAddress[0];
+
+        data.push({
+            "idAddress": oneAddress.idAddress,
+            "number": oneAddress.number,
+            "street": oneAddress.street,
+            "zipcode": oneAddress.zipcode,
+            "country": oneAddress.country,
+            "longitude":oneAddress.longitude,
+            "latitude":oneAddress.latitude
+        });
+        return res.send(data);
+
+    } catch(err) {
+        console.error(err);
+    }
+});
+
 module.exports = router;

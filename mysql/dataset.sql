@@ -12,14 +12,14 @@ INSERT INTO Members (idMembers, pseudo, password, firstname, lastname, mail, las
 (7, 'Jbb',  'sha1$2e4c830f$1$097baa5603c231d1f09d691506b9657f56ca4316', 'Jean-Baptiste', 'Bernard', 'Jbbernard@gmail.com', '24/03/2021/18:00', 2),
 (8, 'inactif',  'sha1$2e4c830f$1$097baa5603c231d1f09d691506b9657f56ca4316', 'inactif', 'inactif', 'inactif@gmail.com', '24/03/2020/18:00', 2);
 
-INSERT INTO Address (idAddress, number, street, zipcode, country) VALUES
-(1, '27', 'Grande Rue', 54000, 'France'),
-(2, '16',  'Rue Saint-Georges', 54000, 'France'),
-(3, '10',  'Rue de Villers', 54000, 'France'),
-(4, '14',  'Rue de la Primatiale', 54000, 'France'),
-(5, '29',  'Rue des Maréchaux', 54000, 'France'),
-(6, '14',  'Rue de Mon Désert', 54000, 'France'),
-(7, '26',  'Rue Emile Bertin', 54000, 'France');
+INSERT INTO Address (idAddress, number, street, zipcode, country, latitude, longitude) VALUES
+(1, '27', 'Grande Rue', 54000, 'France', 48.695545, 6.180939),
+(2, '16',  'Rue Saint-Georges', 54000, 'France', 48.692245, 6.187123),
+(3, '10',  'Rue de Villers', 54000, 'France', 48.685458, 6.16659),
+(4, '14',  'Rue de la Primatiale', 54000, 'France', 48.690467, 6.185266),
+(5, '29',  'Rue des Maréchaux', 54000, 'France', 48.694104, 6.180963),
+(6, '14',  'Rue de Mon Désert', 54000, 'France', 48.684619, 6.178948),
+(7, '26',  'Rue Emile Bertin', 54000, 'France', 48.681057, 6.163736);
 
 INSERT INTO Events (idEvents, title, description, date, url, id_address, id_creator) VALUES
 (1, 'Mon anniversaire', 'Venez fêter mon anniv au Tacos', '05/05/2021/18:00', "https://www.google.com/", 2, 2),

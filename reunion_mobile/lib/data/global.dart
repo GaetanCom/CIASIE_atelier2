@@ -15,28 +15,27 @@ class Global {
 
     var uri = Uri.parse("http://" +
         Global.host +
-        "/events/createdBy/" +
+        "/events/byMember/" +
         Global.user.id.toString());
     print(Global.user.id);
     client.get(uri).then((response) {
       print(response.body);
       var json = jsonDecode(response.body);
-      print(json["events"][0]["id"]);
-
-      for (var i = 0; i < json["events"].length; i++) {
-        var event = json["events"][i];
-        print(event.toString());
+      //print(json["events"][0]["id"]);
+      //print(json[0]);
+      for (var i = 0; i < json.length; i++) {
+        var event = json[i];
+        print(event["id"]);
         Global.events.add(
           new Event(
-              event["idEvents"],
+              event["id"],
               event["title"],
               event["description"],
               event["url"],
               event["date"],
-              event["id_address"],
-              Global.user.id,
-              48.692054,
-              6.184417),
+              event["creator"],
+              event["lat"],
+              event["long"]),
         );
       }
       //this.events.addAll(json["events"]);

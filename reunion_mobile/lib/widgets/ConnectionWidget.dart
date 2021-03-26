@@ -37,8 +37,8 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
     client.get(uri).then((response) {
       print(response.body);
       var json = jsonDecode(response.body);
-
-      if (json["id"] != -1) {
+      print(json["idMembers"]);
+      if (json["idMembers"] != null) {
         Global.user = new Member(json["idMembers"], json["firstname"],
             json["lastName"], json["mail"], json["pseudo"], json["password"]);
 

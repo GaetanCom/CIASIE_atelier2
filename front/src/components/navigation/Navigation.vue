@@ -8,7 +8,8 @@
                 class="navigation_logo" />
         </a>
         <li>
-            <ul> <router-link to="/events">Événements</router-link> </ul>
+            <ul> <a :href="'/events'">Événements</a> </ul>
+            <ul> <a :href="'/register'">inscrptions</a> </ul>
         </li>
     </nav>
     

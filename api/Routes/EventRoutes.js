@@ -46,7 +46,6 @@ router.get('/', async(req, res, next) => {
         res.send(jsonData);
     } catch (error) {
         console.error(error);
-        throw new Error(error);
     }
 
 })
@@ -86,7 +85,6 @@ router.post('/', async(req, res, next) => {
 
     } catch(err) {
         console.log(err);
-        throw new Error(err);
     };
 
 });
@@ -170,7 +168,6 @@ router.get('/:urlevent', async (req, res, next) => {
 
     } catch(error) {
         console.error(error);
-        throw new Error(error);
     }
 
 });
@@ -199,7 +196,6 @@ router.post('/:url/member', async (req, res, next) => {
 
     } catch(err) {
         console.log(err);
-        throw new Error(err);
     }
 });
 
@@ -230,7 +226,6 @@ router.post('/:url/member/:id', async (req, res, next) => {
 
     } catch(err) {
         console.log(err);
-        throw new Error(err);
     }
 
 })
@@ -278,7 +273,6 @@ router.get('/:url/members', async (req, res, next) => {
 
     } catch(err) {
         console.log(err);
-        throw new Error(err);
     }
 
 })
@@ -333,7 +327,6 @@ router.get('/members', async (req, res, next) => {
 
     } catch(err) {
         console.log(err);
-        throw new Error(err);
     }
 })
 
@@ -377,7 +370,6 @@ router.post('/address', async(req, res, next) => {
 
     } catch(err) {
         console.log(err);
-        throw new Error(err);
     }
 
 })

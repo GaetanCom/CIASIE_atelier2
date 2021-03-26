@@ -105,6 +105,8 @@ router.get('/:urlevent', async (req, res, next) => {
 
         let oneEvent = await bdd.all(requeteSQLOneEvent);
 
+        console.log(oneEvent);
+
         let jsonRes = {
             "message": "No Event Found"
         }
@@ -149,6 +151,14 @@ router.get('/:urlevent', async (req, res, next) => {
                         "firstname": oneEvent[0].firstname,
                         "lastname": oneEvent[0].lastname,
                         "pseudo": oneEvent[0].pseudo
+                    },
+                    "address" : {
+                        "idAddress": oneEvent[0].idAddress,
+                        "number": oneEvent[0].number,
+                        "street": oneEvent[0].street,
+                        "country": oneEvent[0].country,
+                        "longitude": oneEvent[0].longitude,
+                        "latitude": oneEvent[0].latitude,
                     },
                     "members": members,
                 }

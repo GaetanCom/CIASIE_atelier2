@@ -1,12 +1,13 @@
 <template>
     <div>
-        <div class="Saisie">
-            <div class="alert" v-if="this.alert !== '' ">
-                <span class="closebtn" v-on:click="supprimerAlert">&times;</span>
-                    {{ this.alert }}
+        <div class="Saisie">     
+            <div>
+                <b-alert variant="danger" v-if="this.alert !== ''" show dismissible>
+                    {{ this.alert }} 
+                </b-alert>
             </div>
             <div>
-                <Input placeholder="login" id="nom" type="text" value="" ref="login"> </Input>
+                <Input class="col-sm-offset-3 col-sm-6" placeholder="login" id="nom" type="text" value="" ref="login"> </Input>
                 <br>
                 <Input placeholder="Mot de passe" id="mdp" type="password" :sendInfo="sendInfoHandler" ref="password"> </Input>
                 <br>
@@ -37,6 +38,8 @@ export default {
 
     methods:{
         sendInfoHandler(){
+            this.alert= '';
+            console.log(this.alert);
             let login = this.$refs.login._data.donnee;
             console.log(login);
             let pwd = this.$refs.password._data.donnee;
@@ -53,9 +56,11 @@ export default {
                 if(reponse.data.message){
                     console.log(reponse.data.message)
                     this.alert = reponse.data.message;
+                    console.log("voici l'alert : " + this.alert);
                 }else{
                     this.$session.start();
                     this.$session.set('idUser', reponse.data.idMembers);
+                    this.$session.set('username', reponse.data.pseudo);
                     this.connection = true;
                     this.$router.push('/events');
                 }
@@ -67,13 +72,13 @@ export default {
             .finally( () => this.loading = false); 
             }else{
                 console.log("erreur l'une des chaines est vide");
+                
+                this.alert = "erreur l'une des chaines est vide";
+                console.log(this.alert);
                 // this.$refs.login._data.value = mail;
             }
 
         },
-        supprimerAlert(){
-            this.alert = '';
-        }
     },
     
     created(){
@@ -87,28 +92,5 @@ export default {
 
 <style>
 
-.alert {
-  padding: 20px;
-  background-color: #f44336; /* Red */
-  color: white;
-  margin-bottom: 15px;
-}
-
-/* The close button */
-.closebtn {
-  margin-left: 15px;
-  color: white;
-  font-weight: bold;
-  float: right;
-  font-size: 22px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-/* When moving the mouse over the close button */
-.closebtn:hover {
-  color: black;
-}
 
 </style>

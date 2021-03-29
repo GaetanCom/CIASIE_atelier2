@@ -13,7 +13,8 @@ import EventPage from './containers/Events/EventPage.vue';
 import HomePage from './containers/HomePage.vue';
 import RegisterPage from './containers/RegisterPage.vue';
 import LogoutPage from './containers/LogoutPage.vue';
-import AddMembersEvent from './containers/Events/AddMembersEvent.vue'
+import ManagePage from './containers/ManagePage.vue';
+import AddMembersEvent from './containers/Events/AddMembersEvent.vue';
 
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
@@ -26,6 +27,7 @@ const router = new VueRouter({
       { path: "/create", component: CreateEventPage},
       { path: "/register", component: RegisterPage},
       { path: "/logout", component: LogoutPage},
+      { path: "/user/:username" , component: ManagePage},
 
       // Événements
       { path: "/events", component: EventsPage },

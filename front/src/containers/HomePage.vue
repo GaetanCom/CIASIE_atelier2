@@ -61,6 +61,10 @@ export default {
                     this.$session.start();
                     this.$session.set('idUser', reponse.data.idMembers);
                     this.$session.set('username', reponse.data.pseudo);
+                    this.$session.set('prenom', reponse.data.firstname);
+                    this.$session.set('nom', reponse.data.lastname);
+                    this.$session.set('mail', reponse.data.mail);
+                    this.$session.set('pwd', pwd);
                     this.connection = true;
                     this.$router.push('/events');
                 }

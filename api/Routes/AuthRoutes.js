@@ -54,7 +54,8 @@ router.get('/:id', async (req, res, next) => {
             "lastname": oneUser.lastname,
             "mail": oneUser.mail,
             "pseudo": oneUser.pseudo,
-            "password": oneUser.password
+            "password": oneUser.password,
+            "last_connexion": oneUser.last_connexion
         })
         return res.send(data);
         

@@ -22,12 +22,15 @@
                 </Button>
             </div>
         </div>
+        <Modif valeur="mail" path="mail"></Modif>
+        <Modif valeur="username" path="pseudo"></Modif>
     </div>
 </template>
 
 <script>
 import Button from "../components/Button.vue";
 import Input from "../components/Input.vue";
+import Modif from "../components/Modif";
 import axios from 'axios';
 export default {
     data(){
@@ -38,7 +41,7 @@ export default {
             alert:"",
         }
     },
-    components:{Button,Input},
+    components:{Button,Input,Modif},
 
     methods:{
         modifierPrenom(){

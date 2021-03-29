@@ -147,6 +147,7 @@ export default {
     created() {
         this.urlEvent = this.$route.params.urlEvent
         console.log("[EventPage.vue] created");
+        console.log("[EventPage.vue] ", this.urlEvent);
 
         axios.get(this.urlApi + this.urlEvent)
             .then(res => {
@@ -159,7 +160,7 @@ export default {
                 this.descriptionEvent = data.event.description;
                 this.dateEventString = data.event.date;
 
-                this.markers = latLng(data.address.longitude,data.address.latitude);
+                this.markers = latLng(data.address.latitude, data.address.longitude);
 
             }).finally(() => {
                 this.loading = false;

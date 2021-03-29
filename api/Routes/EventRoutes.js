@@ -52,16 +52,39 @@ router.get('/', async(req, res, next) => {
 
 router.post('/', async(req, res, next) => {
 
-    const {title, description, date, idCreator, idAddress} = req.body;
-    const members = req.body.members;
+    const {number, street, country, zipcode, title, description, date, idCreator, idAddress} = req.body;
+    const geocoder = NodeGeocoder(options);
+    const address = number + " " + street;
     
     try {
         // Vérification que l'URL qui sera attribuée n'existe pas 
-        let existingUrl;
+        let existingUrl, url;
         do {
-            const url = CreateURL();
-            existingUrl = await bdd.all("SELECT * FROM Events WHERE url="+url);
-        } while(existingUrl.length !== 0);
+            url = CreateURL();
+            console.log(url);
+            const sqlUrl = "SELECT * FROM Events WHERE EXISTS ( SELECT * FROM Events WHERE url='"+url+"')";
+            console.log(sqlUrl);
+            existingUrl = await bdd.query(sqlUrl)
+        } while(existingUrl.length === 1);
+
+        const dataLocalization = await geocoder.geocode({
+            address: address,
+            country: country,
+            zipcode: zipcode
+        });
+
+        const longitude = dataLocalization[0].longitude;
+        const latitude = dataLocalization[0].latitude;
+
+        let reqAddress = "INSERT INTO Address VALUES (null, " 
+        + number + ", '"
+        + street + "', "
+        + zipcode + ", '"
+        + country + "', "
+        + longitude + ", "
+        + latitude + ");"
+
+        const request = await bdd.query(reqAddress);
 
         const events = await bdd.query(
             "INSERT INTO Events (idEvents, title, description, date, url, id_address, id_creator) VALUES (null, '"
@@ -69,11 +92,31 @@ router.post('/', async(req, res, next) => {
             + description + "', '"
             + date + "', '"
             + url + "', "
-            + idAddress + ","
+            + request.insertId + ","
+            + idCreator + ");"
+        );
+
+        console.log("INSERT INTO Guests (idGuests, accept, id_event, id_member) VALUES ("
+        + idCreator + ", 1, "
+        + events.insertId + ","
+        + idCreator + ");")
+
+        const firstGuest = await bdd.query(
+            "INSERT INTO Guests (accept, id_event, id_member) VALUES ( 1, "
+            + events.insertId + ", "
             + idCreator + ");"
         );
     
         res.status(201).json({
+            address: {
+                idAddress: request.insertId,
+                number: number,
+                street: street,
+                zipcode: zipcode,
+                country: country,
+                longitude: longitude,
+                latitude: latitude,
+            },
             idEvents: events.insertId,
             title: title,
             description: description,
@@ -332,48 +375,5 @@ router.get('/members', async (req, res, next) => {
     }
 })
 
-
-router.post('/address', async(req, res, next) => {
-
-    const {number, street, country, zipcode} = req.body;
-    const geocoder = NodeGeocoder(options);
-    const address = number + " " + street;
-
-
-    try {
-        const dataLocalization = await geocoder.geocode({
-            address: address,
-            country: country,
-            zipcode: zipcode
-        });
-
-        const longitude = dataLocalization[0].longitude;
-        const latitude = dataLocalization[0].latitude;
-
-        let reqAddress = "INSERT INTO Address VALUES (null, " 
-        + number + ", '"
-        + street + "', "
-        + zipcode + ", '"
-        + country + "', "
-        + longitude + ", "
-        + latitude + ");"
-
-        const request = await bdd.query(reqAddress);
-
-        return res.status(201).json({
-            idAddress: request.insertId,
-            number: number,
-            street: street,
-            zipcode: zipcode,
-            country: country,
-            longitude: longitude,
-            latitude: latitude,
-        })
-
-    } catch(err) {
-        console.log(err);
-    }
-
-})
 
 module.exports = router;

@@ -28,17 +28,17 @@
             <b-navbar-nav class="ml-auto hamburger">
                 <b-navbar-nav>
                     <!-- <b-nav-item :href="'/events'">Mes événements</b-nav-item> -->
-                    <b-nav-item :href="'/events'" >Mes évènements</b-nav-item>
-                    <b-nav-item :href="'/'" >Se connecter</b-nav-item>
-                    <b-nav-item :href="'/register'" >S'inscrire</b-nav-item>
+                    <b-nav-item v-if="connected" :href="'/events'" >Mes évènements</b-nav-item>
+                    <b-nav-item v-if="!connected" :href="'/'" >Se connecter</b-nav-item>
+                    <b-nav-item v-if="!connected" :href="'/register'" >S'inscrire</b-nav-item>
                 </b-navbar-nav>
 
 
-                <b-nav-item-dropdown right>
+                <b-nav-item-dropdown right v-if="connected">
                     
                 <!-- Using 'button-content' slot -->
                 <template #button-content>
-                    <em>User</em>
+                    <em>{{username}}</em>
                 </template>
                 <div class="userItem">
                     <b-dropdown-item :href="'/user/'">Profil</b-dropdown-item>
@@ -56,6 +56,24 @@
 <script>
 
 export default {
+
+    data() {
+        return{
+            connected: false,
+            username: null,
+        }
+        
+    },
+
+    created() {
+        console.log(this.$session.get('username'));
+
+        if(this.$session.exists()) {
+            this.connected = true;
+            this.username = this.$session.get('username');
+
+        }  
+    }
 }
 </script>
 

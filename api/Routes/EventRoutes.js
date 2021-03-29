@@ -323,7 +323,7 @@ router.get('/:url/members', async (req, res, next) => {
 })
 
 router.get("/createdBy/:id", async (req, res, next) => {
-    let userId = req.params.id
+    let userId = req.params.id;
     try {
         let sql = "SELECT * FROM Events WHERE id_creator=" + userId
         let listeEvents = await bdd.query(sql)

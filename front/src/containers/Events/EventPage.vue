@@ -3,7 +3,9 @@
     <div class="pageEvent">
 
         <div v-if="loading" class="pageEvent_loading">
-            ... LOADING
+            <div>
+                <b-spinner style="width: 3rem; height: 3rem;" label="Large Spinner" variant="info" type="grow"></b-spinner>
+            </div>
         </div>
 
         <div else class="pageEvent_informations"> 
@@ -36,8 +38,11 @@
             </div>
 
             <div class="pageEvent_informations_members">
-                <h3>Participants</h3>
-                <div>
+                <div class="pageEvent_informations_members_headers">
+                    <h3>Participants</h3>
+                    <b-link :href="'/events/'+ urlEvent +'/addmembers'" class="pageEvent_informations_members_headers_link">Ajouter Des participants</b-link>
+                </div>
+                <div class="pageEvent_informations_members_body">
                     <div v-for="member in listMembersEvents" :key="member.idMember" class="oneMember">
                         <div class="oneMember_row">
                             <div id="pseudo">{{member.firstname}} {{member.lastname}}</div>
@@ -276,7 +281,23 @@ export default {
             border-radius: 10px;
             padding: 2%;
 
-            div {
+            &_headers {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                justify-items: center;
+
+                h3 {
+                    width: 50%;
+                }
+
+                &_link {
+                    width: 30%;
+                    text-align: right;
+                }
+            }
+
+            &_body {
                 display: flex;
                 flex-direction: column;
                 width: 100%;
@@ -311,6 +332,7 @@ export default {
 
                 }
             }
+            
         }
 
         .mapbox {

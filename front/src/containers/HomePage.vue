@@ -6,8 +6,8 @@
                     {{ this.alert }} 
                 </b-alert>
             </div>
-            <div>
-                <Input class="col-sm-offset-3 col-sm-6" placeholder="login" id="nom" type="text" value="" ref="login"> </Input>
+            <div class="container test">
+                <Input placeholder="login" id="nom" type="text" value="" ref="login"> </Input>
                 <br>
                 <Input placeholder="Mot de passe" id="mdp" type="password" :sendInfo="sendInfoHandler" ref="password"> </Input>
                 <br>
@@ -91,6 +91,10 @@ export default {
 </script>
 
 <style>
+    .test{
+        text-align: center;
+
+    }
 
 
 </style>

@@ -41,7 +41,7 @@
                     <em>{{username}}</em>
                 </template>
                 <div class="userItem">
-                    <b-dropdown-item :href="'/user/'">Profil</b-dropdown-item>
+                    <b-dropdown-item :href="'/user/'+this.$session.get('username')">Profil</b-dropdown-item>
                     <b-dropdown-item :href="'/logout'">Se déconnecter</b-dropdown-item>
 
                 </div>

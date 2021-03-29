@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <b-form-input
+        <b-form-input class="col-sm-4 mx-auto "
         :id="id" 
         :placeholder="placeholder"
         :type="type" 

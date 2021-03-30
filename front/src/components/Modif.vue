@@ -1,10 +1,10 @@
 <template>
     <div class="row">
-            <div class="col-sm-4 mx-auto" v-if="modifEtat == false">votre {{ valeur }}  est : {{ this.$session.get(valeur) }} 
+            <div class="col-sm-6 mx-auto" v-if="modifEtat == false">votre {{ valeur }}  est : {{ this.$session.get(valeur) }} 
                 <Button buttonName="⚙️" :sendInfo="modifierEtat">
                 </Button>
             </div>
-            <div v-else class="col-sm-4 mx-auto">
+            <div v-else class="col-sm-6 mx-auto">
                 <Input :placeholder="this.$session.get(valeur)" :id="valeur" type="text" value="" :ref="valeur"></Input>
                 <Button buttonName="modifier" :sendInfo="envoieValeur">
                 </Button>
@@ -51,7 +51,7 @@ export default {
                     pseudo: value
                 }
             }else if (this.valeur == "prenom"){
-                value = this.$refs.prenoms._data.donnee;
+                value = this.$refs.prenom._data.donnee;
                 data = {
                     id : this.$session.get('idUser'),
                     firstname: value

@@ -252,6 +252,7 @@ router.get('/:urlevent', async (req, res, next) => {
     }
 
 });
+
 router.post('/:url/member', async (req, res, next) => {
 
     const urlEvent = req.params.url;
@@ -289,6 +290,35 @@ router.post('/:url/member', async (req, res, next) => {
         console.log(err);
     }
 });
+
+router.delete('/:url/member/:memberid', async (req, res, next) => {
+
+    const urlEvent = req.params.url;
+    const memberId = req.params.memberid;
+
+    try {
+
+        let idEvent = await bdd.one("SELECT idEvents FROM Events WHERE url = '" + urlEvent + "'")
+        console.log(idEvent);
+
+        let requetedelete = 
+        "DELETE FROM Guests"
+        + " WHERE id_event = " +  idEvent.idEvents
+        + " AND idGuests = " + memberId;
+
+        console.log(requetedelete);
+
+        let deleteMember = await bdd.query(requetedelete);
+
+        console.log(deleteMember)
+
+        res.send(deleteMember);
+
+    } catch(err) {
+        console.log(err);
+    }
+
+})
 
 router.post('/:url/member/:id', async (req, res, next) => {
 

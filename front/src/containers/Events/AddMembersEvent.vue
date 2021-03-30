@@ -109,7 +109,15 @@ export default {
 
     methods: {
         deleteMember (memberId) {
-            console.log("Suppression de l'invité avec l'id Guest : ", memberId)
+            console.log("Suppression de l'invité avec l'id Guest : ", memberId);
+
+            axios.delete(this.urlApi+this.eventUrl+'/member/'+memberId)
+                .then(res => {
+                    console.log(res)
+                    document.location.reload();
+                }).catch(err => {
+                    console.log(err)
+                })
         },
 
         addMember (memberId) {

@@ -51,18 +51,18 @@ router.get('/', async(req, res, next) => {
 })
 
 router.post('/', async(req, res, next) => {
-
+console.log(req.body);
     const {title, description, date, idCreator, idAddress} = req.body;
     const members = req.body.members;
     
     try {
         // Vérification que l'URL qui sera attribuée n'existe pas 
         let existingUrl;
+        let url;
         do {
-            const url = CreateURL();
-            existingUrl = await bdd.all("SELECT * FROM Events WHERE url="+url);
+            url = CreateURL();
+            existingUrl = await bdd.all("SELECT * FROM Events WHERE url='"+url+"'");
         } while(existingUrl.length !== 0);
-
         const events = await bdd.query(
             "INSERT INTO Events (idEvents, title, description, date, url, id_address, id_creator) VALUES (null, '"
             + title + "', '"
@@ -178,10 +178,10 @@ router.post('/:url/member', async (req, res, next) => {
 
     try {
         let events = await bdd.one("SELECT idEvents from Events WHERE url = '" + urlEvent + "';")
-
+        console.log(events);
         let request = 
         "INSERT INTO Guests (idGuests, accept, id_event, id_member) VALUES (null, 3, "
-        + events[0].idAddress + ", " 
+        + events.idEvents + ", " 
         + memberId + ");"
 
         const addMember = await bdd.query(request);
@@ -332,7 +332,7 @@ router.get('/members', async (req, res, next) => {
 
 
 router.post('/address', async(req, res, next) => {
-
+    console.log(req.body);
     const {number, street, country, zipcode} = req.body;
     const geocoder = NodeGeocoder(options);
     const address = number + " " + street;
@@ -415,7 +415,8 @@ router.get('/byMember/:id', async (req, res, next) => {
                 "url": element.url,
                 "creator": element.pseudo,
                 "lat": element.latitude,
-                "long": element.longitude
+                "long": element.longitude,
+                "state":element.accept
             }
 
             jsonData.push(dataEvent);

@@ -18,7 +18,7 @@
                         <p id="month">{{dateEvent[1]}}</p>
                     </div>
                 </div>
-                <p></p>
+                
             </div>
 
             <div class="pageEvent_informations_creator">
@@ -30,6 +30,35 @@
                 <p>Le {{dateEvent[0]}} {{dateEvent[4]}} {{dateEvent[2]}} à {{dateEvent[3]}}</p>
             </div>
 
+            <div class="pageEvent_informations_response">
+
+                <div v-if="!goodUser" class="pageEvent_informations_response_line">
+                    <p>Vous n'avez pas été invité à cette évènement</p>
+                </div>
+
+
+                <div v-else-if="goodUser && userConnectedAccept == 'waiting'" class="pageEvent_informations_response_line">
+                    <p>{{pseudoCreatorEvent}} attend encore votre réponse</p>
+                    <div>
+                        <b-button variant="success" v-on:click="changeToYes">Je participe</b-button>
+                        <b-button variant="danger" v-on:click="changeToNo">Je ne participe pas</b-button>
+                    </div>
+                </div>
+
+                <div v-else-if="goodUser && userConnectedAccept == 'agreed'" class="pageEvent_informations_response_line">
+                    <p>Vous participez à cette évènement</p>
+                    <div>
+                        <b-button variant="danger" v-on:click="changeToNo">Je ne participe plus</b-button>
+                    </div>
+                </div>
+
+                <div v-else class="pageEvent_informations_response_line">
+                    <p>Vous ne participez à cette évènement</p>
+                    <div>
+                        <b-button variant="success" v-on:click="changeToYes">Je participe finalement</b-button>
+                    </div>
+                </div>
+            </div>
 
 
             <div class="pageEvent_informations_description">
@@ -40,7 +69,12 @@
             <div class="pageEvent_informations_members">
                 <div class="pageEvent_informations_members_headers">
                     <h3>Participants</h3>
-                    <b-link :href="'/events/'+ urlEvent +'/addmembers'" class="pageEvent_informations_members_headers_link">Ajouter Des participants</b-link>
+                    <b-link 
+                        v-if="isCreator"
+                        :href="'/events/'+ urlEvent +'/addmembers'" 
+                        class="pageEvent_informations_members_headers_link" >
+                        Ajouter Des participants
+                    </b-link>
                 </div>
                 <div class="pageEvent_informations_members_body">
                     <div v-for="member in listMembersEvents" :key="member.idMember" class="oneMember">
@@ -59,9 +93,7 @@
 
             </div>
 
-
-
-            <div  class="mapbox">
+            <div class="mapbox">
 
                     <l-map
                         :center="markers"
@@ -78,6 +110,9 @@
                     </l-map>
 
             </div>
+
+
+
 
         </div>
 
@@ -110,6 +145,10 @@ export default {
             dateEventString: '',
             dateEvent: null,
             listMembersEvents: null,
+            idUserConnected: null,
+            goodUser: false,
+            userConnectedAccept: null,
+            isCreator: false,
 
             osmUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             zoom: 13,
@@ -118,39 +157,57 @@ export default {
     },
 
     methods: {
-      zoomUpdated (zoom) {
-        this.zoom = zoom;
-      },
-      centerUpdated (center) {
-        this.center = center;
-      },
 
-      changeDate(date) {
-          let tabDate = date.split("/");
+        changeToNo () {
+            axios.post(this.urlApi + this.urlEvent + '/member/' + this.idUserConnected, {
+                choice: 2
+            }).then(res => {
+                document.location.reload();
+            })
+        },
 
-          let month, monthfr;
+        changeToYes () {
+            axios.post(this.urlApi + this.urlEvent + '/member/' + this.idUserConnected, {
+                choice: 1
+            }).then(res => {
+                document.location.reload();
+            })
+        },
 
-          switch(tabDate[1]) {
-              case '01': month = "JAN"; monthfr = "Janvier"; break;
-              case '02': month = "FEB"; monthfr = "Février"; break;
-              case '03': month = "MAR"; monthfr = "Mars"; break;
-              case '04': month = "APR"; monthfr = "Avril"; break;
-              case '05': month = "MAY"; monthfr = "Mai"; break;
-              case '06': month = "JUN"; monthfr = "Juin"; break;
-              case '07': month = "JUL"; monthfr = "Juillet"; break;
-              case '08': month = "AUG"; monthfr = "Août"; break;
-              case '09': month = "SEP"; monthfr = "Septembre"; break;
-              case '10': month = "OCT"; monthfr = "Octobre"; break;
-              case '11': month = "NOV"; monthfr = "Novembre"; break;
-              case '12': month = "DEC"; monthfr = "Décembre"; break;
-          } 
-          this.dateEvent = [tabDate[0], month, tabDate[2], tabDate[3], monthfr]
-          console.log(this.dateEvent);
-      }
+        zoomUpdated (zoom) {
+            this.zoom = zoom;
+        },
+        centerUpdated (center) {
+            this.center = center;
+        },
+
+        changeDate(date) {
+            let tabDate = date.split("/");
+
+            let month, monthfr;
+
+            switch(tabDate[1]) {
+                case '01': month = "JAN"; monthfr = "Janvier"; break;
+                case '02': month = "FEB"; monthfr = "Février"; break;
+                case '03': month = "MAR"; monthfr = "Mars"; break;
+                case '04': month = "APR"; monthfr = "Avril"; break;
+                case '05': month = "MAY"; monthfr = "Mai"; break;
+                case '06': month = "JUN"; monthfr = "Juin"; break;
+                case '07': month = "JUL"; monthfr = "Juillet"; break;
+                case '08': month = "AUG"; monthfr = "Août"; break;
+                case '09': month = "SEP"; monthfr = "Septembre"; break;
+                case '10': month = "OCT"; monthfr = "Octobre"; break;
+                case '11': month = "NOV"; monthfr = "Novembre"; break;
+                case '12': month = "DEC"; monthfr = "Décembre"; break;
+            } 
+            this.dateEvent = [tabDate[0], month, tabDate[2], tabDate[3], monthfr]
+            console.log(this.dateEvent);
+        }
     },
 
     created() {
-        this.urlEvent = this.$route.params.urlEvent
+        this.urlEvent = this.$route.params.urlEvent;
+        this.idUserConnected = this.$session.get('idUser');
         console.log("[EventPage.vue] created");
         console.log("[EventPage.vue] ", this.urlEvent);
 
@@ -159,7 +216,17 @@ export default {
                 let data = res.data;
                 console.log(data);
                 
-                this.listMembersEvents = data.members
+                this.listMembersEvents = data.members;
+                console.log(this.listMembersEvents);
+                this.listMembersEvents.forEach(member => {
+                    if(member.idMember === this.idUserConnected) {
+                        this.goodUser = true;
+                        this.userConnectedAccept = member.accept;
+                    }
+                });
+                if(res.data.creator.idCreator === this.idUserConnected) {
+                    this.isCreator = true;
+                }
                 this.pseudoCreatorEvent = data.creator.pseudo;
                 this.titleEvent = data.event.title;
                 this.descriptionEvent = data.event.description;
@@ -190,14 +257,16 @@ export default {
     &_informations {
         margin-top: 30px;
         display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
 
         &_title {
             display: flex;
-            justify-content: center;
+            justify-content: space-around;
             justify-items: center;
             text-align: center;
+            width: 100%;
 
             &_calendarIcon {
                 display: flex;
@@ -243,12 +312,14 @@ export default {
         }
 
         &_creator {
+            width: 100%;
             margin-top: 20px;
             padding: 0 2%;
             color: #65676b;
         }
 
         &_titleEvent {
+            width: 100%;
             padding: 0 2%;
             h2 {
                 font-size: 2.5em;
@@ -262,9 +333,28 @@ export default {
             }
         }
 
+        &_response {
+            width: 100%;
+            &_line {
+                width: 100%;
+                margin: auto;
+                max-width: 1000px;  
+                padding: 0 2%;
+                display: flex;
+                justify-content: space-between;
+                justify-items: center;
+
+                p {
+                    margin: 0;
+                    height: 20px;
+                }
+            }
+        }
+
         &_description {
             width: 95%;
-            margin: 20px auto;
+            max-width: 800px;
+            margin: 20px 20px;
             box-shadow: 2px 2px 5px #000;
             border-radius: 10px;
             padding: 2%;
@@ -276,7 +366,8 @@ export default {
 
         &_members {
             width: 95%;
-            margin: 20px auto;
+            max-width: 800px;
+            margin: 20px 20px;
             box-shadow: 2px 2px 5px #000;
             border-radius: 10px;
             padding: 2%;
@@ -337,18 +428,25 @@ export default {
 
         .mapbox {
             position: relative;
-            margin: auto;
-            width:100%;
-            height: 100vw;
+            width:95%;
+            height: 50vw;
+            max-width: 800px;
+            min-height: 400px;
+            margin: 20px 20px;
         }
 
         .map {
             position: absolute;
+            box-shadow: 2px 2px 5px #000;
+            border-radius: 10px;
+            padding: 2%;
         }
 
     }
 
 }
+
+
 
 
 

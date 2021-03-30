@@ -73,7 +73,10 @@ export default {
                 console.log(error);
                 this.errored = true;
             })
-            .finally( () => this.loading = false); 
+            .finally( () => {
+                this.loading = false;
+                document.location.reload();
+            }); 
             }else{
                 console.log("erreur l'une des chaines est vide");
                 

@@ -66,8 +66,6 @@ export default {
     },
 
     created() {
-        console.log(this.$session.get('username'));
-
         if(this.$session.exists()) {
             this.connected = true;
             this.username = this.$session.get('username');

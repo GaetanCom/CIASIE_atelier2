@@ -8,7 +8,11 @@
             </div>
         </div>
 
-        <div else class="pageEvent_informations"> 
+        <div v-else-if="noEvent">
+            <h2 class="errorMessage">Aucun événement trouvé</h2>
+        </div>
+
+        <div v-else class="pageEvent_informations"> 
 
             <div class="pageEvent_informations_title">
                 <div class="pageEvent_informations_title_calendarIcon">
@@ -149,6 +153,7 @@ export default {
             goodUser: false,
             userConnectedAccept: null,
             isCreator: false,
+            noEvent: true,
 
             osmUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             zoom: 13,
@@ -215,25 +220,32 @@ export default {
             .then(res => {
                 let data = res.data;
                 console.log(data);
-                
-                this.listMembersEvents = data.members;
-                console.log(this.listMembersEvents);
-                this.listMembersEvents.forEach(member => {
-                    if(member.idMember === this.idUserConnected) {
-                        this.goodUser = true;
-                        this.userConnectedAccept = member.accept;
+
+                if(data.message === "No Event Found") {
+                    console.log(this.noEvent)
+                } else {
+                    this.noEvent = false;
+                    this.listMembersEvents = data.members;
+                    console.log(this.listMembersEvents);
+                    this.listMembersEvents.forEach(member => {
+                        if(member.idMember === this.idUserConnected) {
+                            this.goodUser = true;
+                            this.userConnectedAccept = member.accept;
+                        }
+                    });
+                    if(res.data.creator.idCreator === this.idUserConnected) {
+                        this.isCreator = true;
                     }
-                });
-                if(res.data.creator.idCreator === this.idUserConnected) {
-                    this.isCreator = true;
+                    this.pseudoCreatorEvent = data.creator.pseudo;
+                    this.titleEvent = data.event.title;
+                    this.descriptionEvent = data.event.description;
+                    this.dateEventString = data.event.date;
+
+                    this.markers = latLng(data.address.latitude, data.address.longitude);
                 }
-                this.pseudoCreatorEvent = data.creator.pseudo;
-                this.titleEvent = data.event.title;
-                this.descriptionEvent = data.event.description;
-                this.dateEventString = data.event.date;
 
-                this.markers = latLng(data.address.latitude, data.address.longitude);
-
+            }).catch(err => {
+                this.noEvent = true;
             }).finally(() => {
                 this.loading = false;
                 this.changeDate(this.dateEventString);
@@ -251,7 +263,16 @@ export default {
     text-align: left;
 
     &_loading {
-        margin-top: 30px;
+        div {
+            text-align: center;
+            margin: 30px 0;
+        }
+    }
+
+    .errorMessage {
+        text-align: center;
+        margin-top: 50px;
+        color: #fd3a62;
     }
 
     &_informations {

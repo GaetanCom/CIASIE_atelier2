@@ -67,6 +67,7 @@ export default {
                     this.$session.set('pwd', pwd);
                     this.connection = true;
                     this.$router.push('/events');
+                    document.location.reload();
                 }
             })
             .catch(error => {
@@ -75,7 +76,6 @@ export default {
             })
             .finally( () => {
                 this.loading = false;
-                document.location.reload();
             }); 
             }else{
                 console.log("erreur l'une des chaines est vide");

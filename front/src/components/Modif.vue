@@ -51,7 +51,7 @@ export default {
                     pseudo: value
                 }
             }else if (this.valeur == "prenom"){
-                value = this.$refs.prenoms._data.donnee;
+                value = this.$refs.prenom._data.donnee;
                 data = {
                     id : this.$session.get('idUser'),
                     firstname: value

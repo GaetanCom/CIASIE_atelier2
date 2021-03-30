@@ -1,29 +1,23 @@
 <template>
     <div>
-        <div class="row">
-            <div class="col-sm-4 mx-auto" v-if="modifPrenom == false">votre prenom est : {{ this.$session.get('prenom') }} 
-                <Button buttonName="⚙️" :sendInfo="modifierPrenom">
-                </Button>
-            </div>
-            <div v-else class="col-sm-4 mx-auto">
-                <Input :placeholder="this.$session.get('prenom')" id="prenom" type="text" value="" ref="prenom"></Input>
-                <Button buttonName="modifier" :sendInfo="envoiePrenom">
-                </Button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-4 mx-auto" v-if="modifNom == false">votre Nom est : {{ this.$session.get('nom') }} 
-                <Button buttonName="⚙️" :sendInfo="modifierNom">
-                </Button>
-            </div>
-            <div v-else class="col-sm-4 mx-auto">
-                <Input :placeholder="this.$session.get('nom')" id="nom" type="text" value="" ref="nom"></Input>
-                <Button buttonName="modifier" :sendInfo="envoieNom">
-                </Button>
-            </div>
-        </div>
+        <Modif valeur="prenom" path="firstname"></Modif>
+        <Modif valeur="nom" path="lastname"></Modif>
         <Modif valeur="mail" path="mail"></Modif>
         <Modif valeur="username" path="pseudo"></Modif>
+        <div class="row">
+            <div class="col-sm-4 mx-auto" v-if="modifPwd == false"> Modifier votre mot de passe 
+                <Button buttonName="⚙️" :sendInfo="modifierPwd">
+                </Button>
+            </div>
+            <div v-else class="col-sm-4 mx-auto">
+                <Input placeholder="rentrer votre ancien mot de passe" id="lastpwd" type="password" value="" ref="lastpwd"></Input>
+                <Input placeholder="taper votre nouveau mot de passe" id="pwd" type="password" value="" ref="pwd"></Input>
+                <Input placeholder="retaper votre nouveau mot de passe" id="Checkpwd" type="password" value="" ref="checkpwd"></Input>
+                <Button buttonName="modifier" :sendInfo="envoiePwd">
+                </Button>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -36,82 +30,62 @@ export default {
     data(){
         return{
             adresseApi: "http://localhost:19080/users",
-            modifPrenom: false,
-            modifNom: false,
+            modifPwd: false,
             alert:"",
         }
     },
     components:{Button,Input,Modif},
 
     methods:{
-        modifierPrenom(){
+        modifierPwd(){
             console.log("je rentre de le modifier prenom");
-            this.modifPrenom = true;
+            this.modifPwd = true;
         },
-        envoiePrenom(){
-            let prenom = this.$refs.prenom._data.donnee;
-            console.log(prenom);
-            console.log(this.$session.get('prenom'));
-            if( (prenom != "") && (prenom != this.$session.get('prenom'))){
-                let data = {
-                    id : this.$session.get('idUser'),
-                    firstname: prenom
+        envoiePwd(){
+            let lastPwd = this.$refs.lastpwd._data.donnee;
+            let pwd = this.$refs.pwd._data.donnee;
+            let checkpwd = this.$refs.pwd._data.donnee;
+
+            console.log("ancien mot de passe d'abord taper puis la valeur enregistrer :");
+            console.log(lastPwd);
+            console.log(this.$session.get('pwd'));
+
+            console.log("valeur du nouveau mot de passe rentrer d'abord le mot de passe puis le check");
+            console.log(pwd);
+            console.log(checkpwd);
+
+            if( lastPwd == this.$session.get('pwd')){
+                if( pwd == checkpwd){
+
+                    let data = {
+                        id : this.$session.get('idUser'),
+                        newpassword: pwd,
+                        oldpassword: lastPwd,
+                    }
+
+                    axios
+                    .post(this.adresseApi+"/update/password", data)
+                    .then(reponse => {
+                            console.log('Reponse OK');
+                            console.log(reponse);
+                            if(reponse.data.message){
+                                console.log(reponse.data.message);
+                                this.alert = reponse.data.message;
+                            }else{
+                                this.$session.set('pwd', pwd);
+                                this.modifPwd = false;
+                            }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        this.errored = true;
+                    })
+                    .finally( () => this.loading = false); 
+                }else{
+                    console.log("les deux mot de passe ne sont pas identique !");
                 }
-                axios
-                .post(this.adresseApi+"/update/firstname", data)
-                .then(reponse => {
-                        console.log('Reponse OK');
-                        console.log(reponse);
-                        if(reponse.data.message){
-                            console.log(reponse.data.message);
-                            this.alert = reponse.data.message;
-                        }else{
-                            this.$session.set('prenom', prenom);
-                            this.modifPrenom = false;
-                        }
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.errored = true;
-                })
-                .finally( () => this.loading = false); 
             }else{
-                console.log("quelques choses c'est mal passé !")
-            }
-        },
-        modifierNom(){
-            console.log("je rentre de le modifier nom");
-            this.modifNom = true;
-        },
-        envoieNom(){
-            let nom = this.$refs.nom._data.donnee;
-            console.log(nom);
-            console.log(this.$session.get('nom'));
-            if( (nom != "") && (nom != this.$session.get('nom'))){
-                let data = {
-                    id : this.$session.get('idUser'),
-                    lastname: nom
-                }
-                axios
-                .post(this.adresseApi+"/update/lastname", data)
-                .then(reponse => {
-                        console.log('Reponse OK');
-                        console.log(reponse);
-                        if(reponse.data.message){
-                            console.log(reponse.data.message);
-                            this.alert = reponse.data.message;
-                        }else{
-                            this.$session.set('nom', nom);
-                            this.modifNom = false;
-                        }
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.errored = true;
-                })
-                .finally( () => this.loading = false); 
-            }else{
-                console.log("quelques choses c'est mal passé !")
+                console.log("votre mot de passe n'est pas bon !");
             }
         },
     }

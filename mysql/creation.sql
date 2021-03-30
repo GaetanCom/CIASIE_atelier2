@@ -60,7 +60,7 @@ ALTER TABLE Members
 ADD CONSTRAINT fk_member_status FOREIGN KEY (id_status) REFERENCES Status(idStatus);
 
 ALTER TABLE Events
-ADD CONSTRAINT fk_event_creator FOREIGN KEY (id_creator) REFERENCES Members(idMembers);
+ADD CONSTRAINT fk_event_creator FOREIGN KEY (id_creator) REFERENCES Members(idMembers) ON DELETE CASCADE;
 ALTER TABLE Events
 ADD CONSTRAINT fk_event_address FOREIGN KEY (id_address) REFERENCES Address(idAddress);
 

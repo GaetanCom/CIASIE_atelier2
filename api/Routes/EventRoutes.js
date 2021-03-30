@@ -453,7 +453,10 @@ router.post("/update/address", async (req, res, next)=> {
         return res.json({
             "idAddress": id,
             "number": newNumber,
-
+            "street": newStreet,
+            "country": newCountry,
+            "longitude": newLongitude,
+            "latitude": newLatitude
         })
     } catch(err) {
         console.log(err);

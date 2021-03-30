@@ -118,8 +118,11 @@ export default {
                 memberId: memberId
                 
             }).then(res => {
-                // document.location.reload();
-                console.log(res);
+                if(res.data.message) {
+                    console.log("NOP")
+                } else {
+                    document.location.reload();
+                }
             })
         },
 

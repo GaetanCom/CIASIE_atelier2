@@ -259,7 +259,17 @@ router.post('/:url/member', async (req, res, next) => {
 
     try {
         let events = await bdd.one("SELECT idEvents from Events WHERE url = '" + urlEvent + "';")
-        console.log(events);
+        let membersId = await bdd.all("SELECT id_member from Guests WHERE id_event = '" + events.idEvents + "';")
+        console.log(membersId);
+
+        membersId.forEach(element => {
+            if(element.id_member === memberId) {
+                res.json({
+                    "message": "User already in this Event"
+                })
+            }
+        })
+
         let request = 
         "INSERT INTO Guests (idGuests, accept, id_event, id_member) VALUES (null, 3, "
         + events.idEvents + ", " 

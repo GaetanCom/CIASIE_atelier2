@@ -375,5 +375,41 @@ router.get('/members', async (req, res, next) => {
     }
 })
 
+router.get('/:idMembers/events', async (req, res, next) => {
+    let idMembers = req.params.idMembers;
+
+    try {
+        let sqlAllEventsById = 
+            "SELECT *" 
+            + " FROM Events e"
+            + " JOIN Guests g ON g.id_event = e.idEvents"
+            + " JOIN Members c ON c.idMembers = e.id_creator"
+            + " WHERE g.id_member = " + idMembers;
+
+        let allEventsByMemberId = await bdd.all(sqlAllEventsById);
+
+        console.log(allEventsByMemberId);
+
+        if(allEventsByMemberId.length === 0) {
+            res.json({
+                "message": "No Event Found"
+            })
+        } else {
+            let jsonResponse = []
+
+            allEventsByMemberId.forEach(element => {
+                jsonResponse.push(element);
+            })
+
+            res.json(jsonResponse);
+        }
+
+    } catch (err) {
+        console.log(err)
+    }
+
+    console.log(idMembers);
+})
+
 
 module.exports = router;

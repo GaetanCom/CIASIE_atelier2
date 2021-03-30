@@ -47,7 +47,11 @@ INSERT INTO Guests (idGuests, accept, id_member, id_event) VALUES
 (17, 2, 3, 4),
 (18, 3, 4, 4),
 (19, 3, 6, 4),
-(20, 2, 7, 4);
+(20, 2, 7, 4),
+(21, 1, 2, 1),
+(22, 1, 3, 2),
+(23, 1, 4, 3),
+(24, 1, 5, 4);
 
 INSERT INTO Messages (idMessages, text, date, id_member, id_event) VALUES
 (1, 'Venez nombreux', '22/03/2021/18:00', 2, 1),

@@ -20,7 +20,8 @@ router.get("/", async (req, res, next) => {
                 "lastname": element.lastname,
                 "mail": element.mail,
                 "pseudo": element.pseudo,
-                "password":element.password
+                "password":element.password,
+                "last_connexion":element.last_connexion
             })
         });
         return res.json(data);

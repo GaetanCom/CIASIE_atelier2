@@ -3,6 +3,7 @@ import App from './App.vue'
 import VueRouter from 'vue-router'
 import axios from 'axios'
 
+
 import HomePage from './components/HomePage'
 import Users from './components/Users.vue'
 import Events from './components/Events.vue'

@@ -132,6 +132,42 @@ router.post('/', async(req, res, next) => {
 
 });
 
+router.get('/members', async (req, res, next) => {
+
+    let pseudo = req.query.p;
+
+
+    try {
+        let request = 
+        "SELECT idMembers, firstname, lastname, pseudo FROM Members "
+        + " WHERE pseudo LIKE '%" + pseudo + "%'"
+        + " OR firstname LIKE '%" + pseudo + "%'"
+        + " OR lastname LIKE '%" + pseudo + "%'";
+
+        let listMembers = await bdd.query(request);
+
+        console.log(listMembers);
+        let members = [];
+
+        listMembers.forEach(element => {
+            let oneMember = {
+                idMembers: element.idMembers,
+                firstname: element.firstname,
+                lastname: element.lastname,
+                pseudo: element.pseudo,
+            }
+            members.push(oneMember);
+        })
+
+        res.json({
+            members: members,
+        })
+
+    } catch(err) {
+        console.log(err);
+    }
+})
+
 router.get('/:urlevent', async (req, res, next) => {
 
     let urlEvent = req.params.urlevent;
@@ -223,10 +259,10 @@ router.post('/:url/member', async (req, res, next) => {
 
     try {
         let events = await bdd.one("SELECT idEvents from Events WHERE url = '" + urlEvent + "';")
-
+        console.log(events);
         let request = 
         "INSERT INTO Guests (idGuests, accept, id_event, id_member) VALUES (null, 3, "
-        + events[0].idAddress + ", " 
+        + events.idEvents + ", " 
         + memberId + ");"
 
         const addMember = await bdd.query(request);
@@ -234,7 +270,7 @@ router.post('/:url/member', async (req, res, next) => {
         res.json({
             idMembers: addMember.insertId,
             accept: 3,
-            event: eventId,
+            event: events.idEvents,
             member: memberId
         })
 
@@ -301,6 +337,7 @@ router.get('/:url/members', async (req, res, next) => {
                 let accept = el.accept === 1 ? "agreed" : el.accept === 2 ? "refused" : "waiting";
                 tabMembers.push({
                     "idGuests": el.idGuests,
+                    "pseudo": el.pseudo,
                     "firstname": el.firstname,
                     "lastname": el.lastname,
                     "accept": accept
@@ -345,34 +382,40 @@ router.get("/createdBy/:id", async (req, res, next) => {
     }
 })
 
-router.get('/members', async (req, res, next) => {
-
-    let pseudo = req.query.p;
-
+router.get('/:idMembers/events', async (req, res, next) => {
+    let idMembers = req.params.idMembers;
 
     try {
-        let request = "SELECT id, pseudo FROM Members WHERE pseudo LIKE '%" + pseudo + "%'";
+        let sqlAllEventsById = 
+            "SELECT *" 
+            + " FROM Events e"
+            + " JOIN Guests g ON g.id_event = e.idEvents"
+            + " JOIN Members c ON c.idMembers = e.id_creator"
+            + " WHERE g.id_member = " + idMembers;
 
-        let listMembers = await bdd.query(request);
+        let allEventsByMemberId = await bdd.all(sqlAllEventsById);
 
-        console.log(listMembers);
-        let members = [];
+        console.log(allEventsByMemberId);
 
-        listMembers.forEach(element => {
-            let oneMember = {
-                idMembers: element.idMembers,
-                pseudo: element.pseudo,
-            }
-            members.push(oneMember);
-        })
+        if(allEventsByMemberId.length === 0) {
+            res.json({
+                "message": "No Event Found"
+            })
+        } else {
+            let jsonResponse = []
 
-        res.json({
-            members: members,
-        })
+            allEventsByMemberId.forEach(element => {
+                jsonResponse.push(element);
+            })
 
-    } catch(err) {
-        console.log(err);
+            res.json(jsonResponse);
+        }
+
+    } catch (err) {
+        console.log(err)
     }
+
+    console.log(idMembers);
 })
 
 

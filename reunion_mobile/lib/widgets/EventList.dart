@@ -20,6 +20,7 @@ class _EventListState extends State<EventList> {
   Widget build(BuildContext context) {
     return Container(
       height: 500.0,
+      key: UniqueKey(),
       // width: 100.0,
       child: ListView.builder(
         itemCount: this.events.length,

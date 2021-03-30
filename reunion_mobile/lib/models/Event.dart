@@ -9,7 +9,8 @@ class Event {
   String creator;
   double lat;
   double long;
-  Event(i, t, d, u, da, c, la, lo) {
+  int state;
+  Event(i, t, d, u, da, c, la, lo, st) {
     this.id = i;
     this.title = t;
     this.description = d;
@@ -18,5 +19,6 @@ class Event {
     this.creator = c;
     this.lat = la;
     this.long = lo;
+    this.state = st;
   }
 }

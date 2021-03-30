@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:reunion_mobile/pages/ConnectionPage.dart';
+import 'package:reunion_mobile/pages/CreateEventPage.dart';
 import 'package:reunion_mobile/pages/EventDetailPage.dart';
 import 'package:reunion_mobile/pages/Homepage.dart';
+import 'package:reunion_mobile/pages/ProfilPage.dart';
 
 class ReunionApp extends StatefulWidget {
   @override
@@ -17,7 +19,8 @@ class _ReunionAppState extends State<ReunionApp> {
       navigatorObservers: [routeObserver],
       routes: {
         "/": (context) => ConnectionPage(),
-        "/home": (context) => Homepage()
+        "/home": (context) => Homepage(),
+        "/profil": (context) => ProfilPage(),
       },
       title: 'Reunionou',
       theme: ThemeData(

@@ -47,18 +47,6 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(json["message"])));
       }
-
-      /*if (response.body != "-1") {
-      
-        
-        Global.user = new Member(json["id"], json["firstname"],
-            json["lastName"], json["mail"], json["pseudo"], json["password"]);
-
-        Navigator.pushNamed(c, "/");
-      } else {
-        print("mauvaise connexion");
-        
-      }*/
     });
   }
 

@@ -9,7 +9,7 @@ class Global {
   static List<Event> events = [];
 
   static void makeList() {
-    print(Global.user.firstName);
+    // print(Global.user.firstName);
     Global.events = [];
     var client = new http.Client();
 
@@ -17,7 +17,7 @@ class Global {
         Global.host +
         "/events/byMember/" +
         Global.user.id.toString());
-    print(Global.user.id);
+    //print(Global.user.id);
     client.get(uri).then((response) {
       print(response.body);
       var json = jsonDecode(response.body);
@@ -25,7 +25,7 @@ class Global {
       //print(json[0]);
       for (var i = 0; i < json.length; i++) {
         var event = json[i];
-        print(event["id"]);
+        //print(event["id"]);
         Global.events.add(
           new Event(
               event["id"],
@@ -35,7 +35,8 @@ class Global {
               event["date"],
               event["creator"],
               event["lat"],
-              event["long"]),
+              event["long"],
+              event["state"]),
         );
       }
       //this.events.addAll(json["events"]);

@@ -1,15 +1,18 @@
 <template>
-    <div>
+    <div class="container">
+        <b-alert variant="danger" v-if="this.alert !== ''" show dismissible>
+                    {{ this.alert }} 
+        </b-alert>
         <Modif valeur="prenom" path="firstname"></Modif>
         <Modif valeur="nom" path="lastname"></Modif>
         <Modif valeur="mail" path="mail"></Modif>
         <Modif valeur="username" path="pseudo"></Modif>
         <div class="row">
-            <div class="col-sm-4 mx-auto" v-if="modifPwd == false"> Modifier votre mot de passe 
+            <div class="col-sm-6 mx-auto" v-if="modifPwd == false"> Modifier votre mot de passe 
                 <Button buttonName="⚙️" :sendInfo="modifierPwd">
                 </Button>
             </div>
-            <div v-else class="col-sm-4 mx-auto">
+            <div v-else class="col-sm-6 mx-auto">
                 <Input placeholder="rentrer votre ancien mot de passe" id="lastpwd" type="password" value="" ref="lastpwd"></Input>
                 <Input placeholder="taper votre nouveau mot de passe" id="pwd" type="password" value="" ref="pwd"></Input>
                 <Input placeholder="retaper votre nouveau mot de passe" id="Checkpwd" type="password" value="" ref="checkpwd"></Input>

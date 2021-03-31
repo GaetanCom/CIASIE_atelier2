@@ -16,15 +16,40 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  List<Event> events = [];
+  int _selectedIndex = 0;
   var urlController = TextEditingController();
+  _HomepageState() {
+    // Global.makeList();
+  }
+  void initState() {
+    super.initState();
+    () async {
+      await Global.makeList();
+      setState(() {});
+    }();
+  }
+
+  void _onItemTapped(int index) {
+    if (index != _selectedIndex) {
+      setState(() {
+        _selectedIndex = index;
+        switch (index) {
+          case 0:
+            Navigator.pushReplacementNamed(context, "/home");
+            break;
+          case 1:
+            Navigator.pushReplacementNamed(context, "/profil");
+            break;
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(Global.user.id);
-    Global.makeList();
     return Scaffold(
       appBar: AppBar(
-        title: Row(children: [
+        title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text("Accueil"),
           Visibility(
               visible: Global.user.id != -1,
@@ -33,7 +58,7 @@ class _HomepageState extends State<Homepage> {
                   Global.user = Member.empty();
                   Navigator.pushReplacementNamed(context, "/");
                 },
-                child: Text("Se deconnecter"),
+                child: Icon(Icons.logout),
               )),
           Visibility(
               visible: Global.user.id != -1,
@@ -42,31 +67,18 @@ class _HomepageState extends State<Homepage> {
                   Global.makeList();
 
                   setState(() {});
-                  //Navigator.pushReplacementNamed(context, "/home");
                 },
-                child: Text("Recharger"),
+                child: Icon(Icons.replay_outlined),
               )),
-          Visibility(
-              visible: Global.user.id != -1,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, "/profil");
-                },
-                child: Text("Profil"),
-              ))
         ]),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text("Bienvenue " + Global.user.firstName),
-          EventList(Global.events),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CreateEventPage()));
-              },
-              child: Text("+")),
+          Text(
+            "Bienvenue " + Global.user.firstName,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           Text("Participer a un event:"),
           TextField(
             controller: urlController,
@@ -90,7 +102,7 @@ class _HomepageState extends State<Homepage> {
                             "memberId": Global.user.id.toString(),
                           }))
                       .then((response) {
-                    print(response.body);
+                    // print(response.body);
 
                     setState(() {});
                   });
@@ -99,8 +111,24 @@ class _HomepageState extends State<Homepage> {
                       .showSnackBar(SnackBar(content: Text("Url invalide")));
                 }
               },
-              child: Text("Participer"))
+              child: Text("Participer")),
+          EventList(Global.events),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => CreateEventPage()));
+          },
+          child: Text("+")),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile")
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: _onItemTapped,
       ),
     );
   }

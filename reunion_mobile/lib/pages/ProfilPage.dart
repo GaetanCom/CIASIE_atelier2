@@ -6,13 +6,40 @@ import 'package:reunion_mobile/data/global.dart';
 import "package:http/http.dart" as http;
 import 'package:reunion_mobile/models/Member.dart';
 
-class ProfilPage extends StatelessWidget {
+class ProfilPage extends StatefulWidget {
+  @override
+  _ProfilPageState createState() => _ProfilPageState();
+}
+
+class _ProfilPageState extends State<ProfilPage> {
   final formkey = GlobalKey<FormState>();
+
   var pseudoController = TextEditingController();
+
   var pwdController = TextEditingController();
+
   var firstnameController = TextEditingController();
+
   var lastnameController = TextEditingController();
+
   var mailController = TextEditingController();
+  int _selectedIndex = 1;
+  void _onItemTapped(int index) {
+    if (index != _selectedIndex) {
+      setState(() {
+        _selectedIndex = index;
+        switch (index) {
+          case 0:
+            Navigator.pushReplacementNamed(context, "/home");
+            break;
+          case 1:
+            Navigator.pushReplacementNamed(context, "/profil");
+            break;
+        }
+      });
+    }
+  }
+
   void save(BuildContext c) {
     var client = http.Client();
     var uri1 = Uri.parse("http://" + Global.host + "/users/update/firstname");
@@ -139,6 +166,15 @@ class ProfilPage extends StatelessWidget {
             // Add TextFormFields and ElevatedButton here.
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile")
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: _onItemTapped,
       ),
     );
   }

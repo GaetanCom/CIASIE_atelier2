@@ -1,0 +1,438 @@
+Requête de notre API
+
+=======================================================
+
+ROUTES pour '/users'
+
+==================
+
+GET '/'
+
+    description : 
+        Récupération de tous les utilisateurs de l'application
+        
+    return :
+        JSON {["idMembers", "firstname", "lastname", "mail", "pseudo", "password", "last_connexion"], [...]}
+
+==================
+
+GET '/:id'
+
+    description :
+        Récupération de tous les utilisateurs de l'application en fonction de son id
+
+    params :
+        - id = id du l'utilisateur
+
+    return :
+        JSON {"idMembers", "firstname", "lastname", "mail", "pseudo", "password", "last_connexion"}
+
+==================
+
+GET '/connection/checkRegistered'
+
+    description :
+        Vérification de la connexion d'un utilisateur
+
+    query :
+        - login = pseudo de l'utilisateur
+        - pwd = mot de passe de l'utilisateur
+
+    return :
+        JSON {"idMembers", "firstname", "lastname", "mail", "pseudo"}
+
+==================
+
+POST '/connection/signup' :
+
+    description :
+        Enregistrement dans la base de donnée d'un nouvel utilisateur
+
+    body :
+        - firstname = prénom de l'utilisateur
+        - lastname = nom de l'utilisateur
+        - mail = mail de l'utilisateur
+        - pseudo = pseudo de l'utilisateur
+        - password = mot de passe de l'utilisateur
+
+    return :
+        JSON {"idMembers", "firstname", "lastname", "mail", "pseudo"}
+
+==================
+
+POST '/update/firstname' :
+
+    description :
+        Mise à jour du prénom 
+
+    body :
+        - firstname = nouveau prénom de l'utilisateur
+        - id = id de l'utilisateur
+
+    return :
+        JSON {"idMembers", "firstname"}
+
+==================
+
+POST '/update/lastname' :
+
+    description :
+        Mise à jour du nom 
+
+    body :
+        - lastname = nouveau nom de l'utilisateur
+        - id = id de l'utilisateur
+
+    return :
+        JSON {"idMembers", "lastname"}
+
+==================
+
+POST '/update/mail' :
+
+    description :
+        Mise à jour du mail 
+
+    body :
+        - mail = nouveau mail de l'utilisateur
+        - id = id de l'utilisateur
+
+    return :
+        JSON {"idMembers", "mail"}
+
+==================
+
+POST '/update/password' :
+
+    description :
+        Mise à jour du mot de passe 
+
+    body :
+        - newpassword = nouveau mot de passe de l'utilisateur
+        - oldpassword = mot de passe actuel de l'utilisateur
+        - id = id de l'utilisateur
+
+    return :
+        JSON {"idMembers"}
+
+==================
+
+POST '/update/pseudo' :
+
+    description :
+        Mise à jour du pseudo
+
+    body :
+        - pseudo = nouveau pseudo de l'utilisateur
+        - id = id de l'utilisateur
+
+    return :
+        JSON {"idMembers", "pseudo"}
+
+==================
+
+POST '/delete/member' :
+
+    description :
+        suppression d'un utilisateur
+
+    body :
+        - id = id de l'utilisateur
+
+    return :
+        JSON {"message": "SUCCESS"}
+
+
+=======================================================
+
+ROUTES pour '/events'
+
+==================
+
+GET '/' :
+
+    description :
+        Récupération de tous les événements de l'application
+
+    return :
+        JSON({"id":, "title", "description", "date", "url", "creatorId"})
+
+==================
+
+GET '/members' :
+
+    description :
+        permet de lister les membres de l'application en fonction d'une chaine de caractères (pseudo, firstname, lastname, mail)
+
+    query :
+        - p = chaine de caractère
+
+    return :
+        JSON({"idMembers", "firstname", "lastname", "pseudo"})
+
+==================
+
+GET '/:urlevent' :
+
+    description :
+        Retourne toutes les informations d'un événement (createur, événement, liste des membres)
+
+    params :
+        - urlevent : URL de l'évènement (id aléatoire selon 15 caractères)
+
+    return :
+        JSON({
+            "event" : {
+                "idEvent", "title", "description", "date", "url"
+            },
+            "creator" : {
+                "idCreator", "firstname", "lastname", "pseudo"
+            },
+            "address": {
+                "idAddress", "number", "street", "country", "longitude", "latitude"
+            }
+            "members": {
+                [{
+                    "idMember", "firstname", "lastname", "accept"
+                }], [...]
+            }
+        })
+
+==================
+
+GET '/:url/members' :
+
+    description :
+        Liste tous les membres d'un événement
+
+    params :
+        - url = url de l'événement
+
+    return :
+        JSON({
+            ["idGuests", "pseudo", "firstname", "lastname", "accept"],
+            [...], [...]
+        })
+
+==================
+
+GET '/createdBy/:id' :
+
+    description :
+        Liste tous les événements créent par un utilisateur 
+
+    params :
+        - id = id de l'utilsateur
+
+    return :
+        JSON({["id", "title", "description", "date", "url", "creator", "lat", "long", "state"], [...]})
+
+==================
+
+GET '/:idMembers/events' :
+
+    description :
+        Liste tous les événement d'un utilisateur crée, invité ou participants
+
+    params :
+        - idMembers = id de l'utilisateur
+
+    return :
+
+    
+==================
+
+GET '/byMember/:id' :
+
+    description :
+        Liste tous les événements créent par un utilisateur 
+
+    params :
+        - id = id de l'utilsateur
+
+    return :
+        JSON({"id", "title", "description", "date", "url", "creator", "lat", "long", "state"})
+
+==================
+
+GET '/address/:id' :
+
+    description :
+        Retourne les données d'une adresse en focntion de son id
+
+    params :
+        - id = id de l'adresse
+
+    return :
+        JSON({"idAddress", "number", "street", "zipcode", "country", "longitude", "latitude"})
+
+==================
+
+PUT '/address' :
+
+    description :
+        Modification des données d'une adresse
+
+    params :
+        - number = numéro de l'adresse
+        - street = nom de la rue
+        - zipcode = code postale
+        - country = pays
+
+    return :
+        JSON({"idAddress", "number", "street", , "country", "longitude", "latitude"})
+
+==================
+
+POST '/' :
+
+    description :
+        Création d'un événement avec son url personnelle, ainsi que d'une adresse
+
+    body :
+        - number = numéro de l'adresse
+        - street = nom de la rue
+        - country = Pays
+        - zipcode = code postal de l'adresse
+        - title = titre de l'événement
+        - description = description de l'événement
+        - date = date et heure de l'événement (JJ/MM/AAAA/HH:MM)
+        - idCreator = id de l'utilsiateur ayant crée l'événement
+
+    return :
+        JSON({
+            "address": {
+                "idAddress", "number", "street", "zipcode", "country", "longitude", "latitude"
+            },
+            "idEvents", "title", "description", "date", "url", "idCreator", "idAddress"
+
+        })
+
+==================
+
+POST '/:url/member' :
+
+    description :
+        Ajout d'un membre dans un événement
+
+    body :
+        - memberId = Id de l'utilisateur à ajouter
+
+    params :
+        - url = url de l'événement
+
+    return :
+        JSON({"idMembers", "accept", "event", "member"})
+
+==================
+
+POST '/:url/member/:id' :
+
+    description :
+        Mettre à jour le choix d'un utilisateur
+
+    body :
+        - choice = numéro du choix (1 = accepter, 2 = refuser, 3 = en attente)
+
+    params :
+        - url = url de l'événement
+        - id = id de l'utilisateur
+
+    return :
+        JSON({"message": "Data Update"})
+
+==================
+
+DELETE '/:url/member/:memberid' :
+
+    description :
+        Supprimer un membre d'un événement en fonction de son id
+
+    params :
+        - url = url de l'événement
+        - memberid = id de l'utulisateur à supprimer de l'événement
+
+    return :
+
+
+==================
+
+DELETE '/event' :
+
+    description :
+        Suppression d'un événement en focntion de son id
+
+    body :
+        - id = Id de l'événement
+
+    return :
+        JSON({"message": "SUCCESS"})
+
+
+=======================================================
+
+ROUTES pour '/messages'
+
+==================
+
+GET '/:idMessages' :
+
+    description :
+        Retourne un message en fonction de son id
+
+    body :
+        - idMessages = Id de du message
+
+    return :
+        JSON({
+            "event": {
+                "idEvents", "title"
+            },
+            "member": {
+                "idMembers", "pseudo", "firstname", "lastname",
+            },
+            "message": {
+                "idMessages", "message", "date"
+            }
+        })
+
+==================
+
+GET '/:urlEvent' :
+
+    description :
+        Retourne tous les messages d'un événements dans l'ordre decroissant
+
+    params :
+        - urlEvent = url de l'événement
+
+    return :
+        JSON(messages, ...)
+
+==================
+
+POST '/' :
+
+    description :
+        Crée un message dans un événement, vérifie si utilisateur est bien dans cette événement
+
+    body :
+        - message = texte du message
+        - idEvents = Id de l'événement
+        - idMembers = Id de l'utilisateur postant ce message
+
+    return :
+        JSON({"idMembers", "idEvents", "message"})
+
+==================
+
+DELETE '/:idMessages' :
+
+    description :
+        Suppression d'un message en fonction de son id
+
+    params :
+        - idMessages = Id du message
+
+    return :
+        JSON({"message": "Message Deleted successfully"})

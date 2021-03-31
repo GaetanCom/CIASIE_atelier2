@@ -1,1 +1,31 @@
 # Atelier 2
+
+pour lancer l'application web client :
+
+Allez dans le dossier front.
+Ouvrir un terminal et lancez les commandes suivantes :
+	- npm install 
+	- npm run dev 
+L'application devrait alors se lancer automatiquement sur le port localhost:8081
+vous avez alors la possibilité de clicker en haut à droite pour vous inscrire ou alors de vous connecter directement avec un compte existant : 
+	- si vous choisissez de vous connecter directement avec un compte existant voici ce qu'il faut rentrer :
+		-username: Zacpot
+		-mdp: Zacpot123
+		
+Pour lancer l'application admin :
+
+Allez dans le dossier back.
+Ouvrir un terminal et lancez les commandes suivantes :
+	-npm install
+	-npm run dev 
+L'application devrait alors se lancer automatiquement sur le port localhost:8082
+Vous avez alors la possibilité de vous connecter pour ça il faut rentrer les identifiants suivants:
+	-Login: Admin
+	-mdp: Admin123
+Vous pouvez ensuite voir les utilisateurs dans le menu et les evenements une fois selectionner vous etes rediriger vers les pages vous montrant les utilisateurs que vous pouvez supprimer ainsi que les evenements que vous pouvez supprimer
+
+
+Pour lancez l'application mobile :
+
+Allez dans le dossier reunion_mobile 
+Et lancez la commande flutter run

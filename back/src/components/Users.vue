@@ -43,7 +43,9 @@
         errored : false,
         alertError:"",
         dateConnexion:null,
-        error:""
+        error:"",
+        urlApi: "http://docketu.iutnc.univ-lorraine.fr:13003/",
+        // urlApi: "http://localhost:19080/",
 
       };
     },
@@ -52,7 +54,7 @@
         this.dateConnexion=null;
           console.log(id)
           axios
-                  .get("http://localhost:19080/users/"+id)
+                  .get(this.urlApi+"/users/"+id)
                   .then (response => {
                     this.dateConnexion= response.data[0].last_connexion;
                     let day = this.dateConnexion.substr(0, 2);
@@ -66,12 +68,12 @@
                     if(dC < d){
                       var r = confirm("Êtes-vous sur ?");
                       if (r == true) {
-                        axios.post("http://localhost:19080/users/delete/member", {
+                        axios.post(this.urlApi+"/users/delete/member", {
                           id:id
                         }).then(res => {
                           this.errored = false;
                           axios
-                                  .get("http://localhost:19080/users")
+                                  .get(this.urlApi+"/users")
                                   .then (response => {
                                     console.log(response.data)
                                     this.users = response.data

@@ -24,6 +24,8 @@
                     username: "",
                     password: ""
                 },
+                urlApi: "http://docketu.iutnc.univ-lorraine.fr:13003/",
+                // urlApi: "http://localhost:19080/",
                 loading:false,
                 errored:false,
                 alertError:"",
@@ -32,7 +34,7 @@
         methods: {
             login() {
                 if(this.input.username != "" && this.input.password != "" && this.input.username.includes("Admin")) {
-                    const url = "http://localhost:19080/users/connection/checkRegistered?login="+this.input.username+"&pwd="+this.input.password;
+                    const url = this.urlApi+"/users/connection/checkRegistered?login="+this.input.username+"&pwd="+this.input.password;
                     axios
                         .get(url)
                         .then(response => {

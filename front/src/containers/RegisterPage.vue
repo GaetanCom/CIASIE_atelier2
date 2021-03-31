@@ -29,8 +29,8 @@ export default {
 
     data(){
         return{
-            // adresseApi: "http://docketu.iutnc.univ-lorraine.fr:13003/users/connection/signup",
-            adresseApi: "http://localhost:19080/users/connection/signup",
+            adresseApi: "http://docketu.iutnc.univ-lorraine.fr:13003/users/connection/signup",
+            // adresseApi: "http://localhost:19080/users/connection/signup",
             alert: "",
         }
     },

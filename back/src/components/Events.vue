@@ -30,6 +30,8 @@
     name: 'events',
     data() {
       return {
+        urlApi: "http://docketu.iutnc.univ-lorraine.fr:13003/events/",
+        // urlApi: "http://localhost:19080/events/",
         events:[],
         date:null,
         errored:false,
@@ -49,12 +51,12 @@
         if(dC < d){
           var r = confirm("Êtes-vous sur ?");
           if (r == true) {
-            axios.post("http://localhost:19080/events/delete/event", {
+            axios.delete(this.urlApi+"/event", {
               id:id
             }).then(res => {
               this.errored = false;
               axios
-                      .get("http://localhost:19080/events")
+                      .get(this.urlApi +"/events")
                       .then (response => {
                         console.log(response.data)
                         this.events = response.data

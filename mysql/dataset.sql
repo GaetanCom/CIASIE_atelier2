@@ -22,11 +22,10 @@ INSERT INTO Address (idAddress, number, street, zipcode, country, latitude, long
 (7, '26',  'Rue Emile Bertin', 54000, 'France', 48.681057, 6.163736);
 
 INSERT INTO Events (idEvents, title, description, date, url, id_address, id_creator) VALUES
-(1, 'Mon anniversaire', 'Venez fêter mon anniv au Tacos', '05/05/2021/18:00', "https://www.google.com/", 2, 2),
-(2, 'Ma bar-mitzvah', 'Venez fêter ma bar-mitzvah', '11/06/2021/14:00', "https://www.google.com/", 6, 3),
-(3, 'Mon permis de conduire', 'Venez fêter mon permis de conduire', '20/03/2021/18:00', "https://www.google.com/", 7, 4),
-(4, 'Mon Diplome', 'Venez fêter mon Diplome', '07/07/2021/10:00', "https://www.google.com/", 5, 5);
-
+(1, 'Mon anniversaire', 'Venez fêter mon anniv au Tacos', '05/05/2021/18:00', "uv3u39vyt97j678", 2, 2),
+(2, 'Ma bar-mitzvah', 'Venez fêter ma bar-mitzvah', '11/06/2021/14:00', "8r4518u7f7rhvl4", 6, 3),
+(3, 'Mon permis de conduire', 'Venez fêter mon permis de conduire', '20/03/2021/18:00', "6t6b04w89w6b7lr", 7, 4),
+(4, 'Mon Diplome', 'Venez fêter mon Diplome', '07/07/2021/10:00', "ku03487vgw91e0a", 5, 5);
 INSERT INTO Guests (idGuests, accept, id_member, id_event) VALUES
 (1, 1, 3, 1),
 (2, 3, 4, 1),

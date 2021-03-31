@@ -38,8 +38,10 @@ class CreateEventWidget extends StatelessWidget {
     var uri = Uri.parse("http://" + Global.host + "/events/address");
     print(uri.host);
     print(uri.port);
+
+    var uri2 = Uri.parse("http://" + Global.host + "/events");
     client
-        .post(uri,
+        .post(uri2,
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
             },
@@ -47,32 +49,19 @@ class CreateEventWidget extends StatelessWidget {
               "number": addressNumController.text,
               "street": addressController.text,
               "country": addressCountryController.text,
-              'zipcode': addressZipController.text
+              'zipcode': addressZipController.text,
+              "title": titleController.text,
+              "description": descriptionController.text,
+              "date": date.toString(),
+              'idCreator': Global.user.id.toString()
             }))
-        .then((response) {
-      print(response.body);
-      var json = jsonDecode(response.body);
-      var uri2 = Uri.parse("http://" + Global.host + "/events");
-      client
-          .post(uri2,
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8',
-              },
-              body: jsonEncode(<String, String>{
-                "title": titleController.text,
-                "description": descriptionController.text,
-                "date": date.toString(),
-                'idCreator': Global.user.id.toString(),
-                "idAddress": json["idAddress"].toString()
-              }))
-          .then((response2) {
-        print(response2.body);
-        var data = jsonDecode(response2.body)["url"];
-        Clipboard.setData(ClipboardData(text: data.toString()));
-        ScaffoldMessenger.of(c).showSnackBar(SnackBar(
-            content: Text("L'url a été copiée dans votre presse-papier")));
-        Navigator.pop(c);
-      });
+        .then((response2) {
+      print(response2.body);
+      var data = jsonDecode(response2.body)["url"];
+      Clipboard.setData(ClipboardData(text: data.toString()));
+      ScaffoldMessenger.of(c).showSnackBar(SnackBar(
+          content: Text("L'url a été copiée dans votre presse-papier")));
+      Navigator.pop(c);
     });
   }
 

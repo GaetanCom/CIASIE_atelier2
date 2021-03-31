@@ -15,63 +15,48 @@
             <a :href="'/create'">Créer un Évènement</a>
         </div>
 
-        <div v-else> 
+        <div v-else class="myEventsPage"> 
             <a :href="'/create'">Créer un Évènement</a>
 
-            <div >
-                <h2>Événements crées</h2>
-                <b-card
-                    v-for="eventC in eventcreator" 
-                    :key="eventC.idEvents"
-                    :title="eventC.title"
-                    tag="article"
-                    style="max-width: 20rem;"
-                    class="mb-2">
-                    <b-card-text>
-                        <p>Crée par {{eventC.pseudo}} </p>
-                        <p>
-                            <span class="accept_ok" v-if="eventC.accept === 1">Vous participez</span>
-                            <span class="accept_no" v-if="eventC.accept === 2">Vous ne participez pas</span>
-                            <span class="accept_wait" v-if="eventC.accept === 3">Réponse attendu</span>
-                        </p>
-                        <p>Le {{getDate(eventC.date)}}</p>
-                        <p>À {{getHour(eventC.date)}}</p>
-                    </b-card-text>
+            <div>
+                <h2>Vos événements crées</h2>
 
-                    <b-button :href="'/events/'+eventC.url" variant="primary">En savoir plus</b-button>
-                </b-card>
-
+                <div class="myEventsPage_allEvents">
+                    <OneEventCard 
+                        v-for="eventC in eventcreator"
+                        :key="eventC.idEvents"
+                        :title="eventC.title"
+                        tag="article"
+                        style="max-width: 20rem;"
+                        class="mb-2 test"
+                        :pseudo="eventC.pseudo"
+                        :accept="eventC.accept"
+                        :date="eventC.date"
+                        :url="eventC.url"
+                    />
+                </div>
             </div>
 
             <hr>
 
-            <div>
+            <div >
                 <h2>Tous vos événements</h2>
-                <b-card
-                    v-for="event in eventAll" 
-                    :key="event.idEvents"
-                    :title="event.title"
-                    tag="article"
-                    style="max-width: 20rem;"
-                    class="mb-2">
-                    <b-card-text>
-                        <p>Crée par {{event.pseudo}} </p>
-                        <p>
-                            <span class="accept_ok" v-if="event.accept === 1">Vous participez</span>
-                            <span class="accept_no" v-if="event.accept === 2">Vous ne participez pas</span>
-                            <span class="accept_wait" v-if="event.accept === 3">Réponse attendu</span>
-                        </p>
-                            
-                        <p>Le {{getDate(event.date)}}</p>
-                        <p>À {{getHour(event.date)}}</p>
-                    </b-card-text>
 
-                    <b-button :href="'/events/'+event.url" variant="primary">En savoir plus</b-button>
-                </b-card>
+                <div class="myEventsPage_allEvents">
+                    <OneEventCard 
+                        v-for="event in eventAll"
+                        :key="event.idEvents"
+                        :title="event.title"
+                        tag="article"
+                        style="max-width: 20rem;"
+                        class="mb-2"
+                        :pseudo="event.pseudo"
+                        :accept="event.accept"
+                        :date="event.date"
+                        :url="event.url"
+                    />
+                </div>
             </div>
-
-              
-            
 
         </div>
     </div>
@@ -81,18 +66,21 @@
 <script>
 import axios from 'axios';
 
-export default {
+import OneEventCard from './OneEventCard';
 
+export default {
     data() {
         return {
-            // urlApi: "http://docketu.iutnc.univ-lorraine.fr:13003/events/",
-            urlApi: "http://localhost:19080/events/",
+            urlApi: "http://docketu.iutnc.univ-lorraine.fr:13003/events/",
+            // urlApi: "http://localhost:19080/events/",
             userId: null,
             eventAll: [],
             eventcreator: [],
             loading: true, 
         }
     },
+
+    components: {OneEventCard},
 
     methods: {
         getDate(datas) {
@@ -136,30 +124,21 @@ export default {
 
 <style lang="scss">
 
+.myEventsPage {
+    padding: 2%;
+    width: 100%;
+}
+
+.myEventsPage_allEvents {
+    display: flex;
+}
+
 .event {
     &_loading {
         div {
             text-align: center;
             margin: 30px 0;
         }
-    }
-}
-
-.accept {
-    
-    &_ok {
-        color: green;
-        font-weight: bold;
-    }
-
-    &_no {
-        color: red;
-        font-weight: bold;
-    }
-
-    &_wait {
-        color: orange;
-        font-weight: bold;
     }
 }
 

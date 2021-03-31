@@ -80,7 +80,8 @@ import Input from '../components/Input';
 export default {
     data(){
         return {
-            apiUrl: "http://localhost:19080",
+            // apiUrl: "http://localhost:19080",
+            urlApi: "http://docketu.iutnc.univ-lorraine.fr:13003/",
             error: false,
             messageError: "",
             loading: false,

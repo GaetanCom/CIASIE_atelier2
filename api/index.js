@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 
 const auth_routes = require('./Routes/AuthRoutes');
 const event_routes = require('./Routes/EventRoutes');
-
+const message_routes = require('./Routes/MessageRoutes');
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 
 app.use('/users', auth_routes);
 app.use('/events', event_routes);
-
+app.use('/messages', message_routes);
 
 app.listen(port, () => {
     console.log(`api listening at http://localhost:${port}`)

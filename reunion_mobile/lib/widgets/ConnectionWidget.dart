@@ -37,8 +37,8 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
     client.get(uri).then((response) {
       print(response.body);
       var json = jsonDecode(response.body);
-
-      if (json["id"] != -1) {
+      print(json["idMembers"]);
+      if (json["idMembers"] != null) {
         Global.user = new Member(json["idMembers"], json["firstname"],
             json["lastName"], json["mail"], json["pseudo"], json["password"]);
 
@@ -47,18 +47,6 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(json["message"])));
       }
-
-      /*if (response.body != "-1") {
-      
-        
-        Global.user = new Member(json["id"], json["firstname"],
-            json["lastName"], json["mail"], json["pseudo"], json["password"]);
-
-        Navigator.pushNamed(c, "/");
-      } else {
-        print("mauvaise connexion");
-        
-      }*/
     });
   }
 

@@ -84,13 +84,14 @@ export default {
             error: false,
             messageError: "",
             loading: false,
-            idAddr: null
+            idAddr: null,
+            url: null,
         }
     },
     components: {Button, Input},
 
     methods: {
-        sendEventsHandler() {
+        sendEventsHandler()  {
             let title = this.$refs.titleEvent.donnee;
             let description = this.$refs.descriptionEvent.donnee;
             let hour = this.$refs.HourEvent.donnee;
@@ -115,10 +116,6 @@ export default {
                 let hourR = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
                 let dateR = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
 
-                console.log(title);
-                console.log(description);
-                console.log(hour);
-                console.log(date);
 
                 if( true
                     // title.match(letterNumberR) 
@@ -134,30 +131,26 @@ export default {
                     let tabDate = date.split("-");
                     let newDateHour = tabDate[2] + "/" + tabDate[1] + "/" + tabDate[0] + "/" + hour;
                     
-                    axios.post(this.apiUrl+"/events/address", {
+                    axios.post(this.apiUrl+"/events", {
                         number: numAddr,
                         street: streetAddr,
                         country: countryAddr,
                         zipcode: zipcodeAddr,
-                    }).then(res => {
-                        this.idAddr = res.data.id
-                        console.log(res);
-                    }).catch(err => {
-                        console.log(err)
-                    })
-
-                    axios.post(this.apiUrl+"/events", {
                         title: title,
                         description: description,
                         date: newDateHour,
-                        idCreator: 1,
+                        idCreator: this.$session.get('idUser'),
                         idAddress: this.idAddr
                     }).then(res => {
+                        this.idAddr = res.data.address.idAddress;
+                        this.url = res.data.url
                         console.log(res);
+                        this.loading = false;
+                        this.$router.push('/events/'+this.url);
                     }).catch(err => {
                         console.log(err)
                     }).finally(() => {
-                        this.loading = false
+                        console.log("ADDR = " + this.idAddr)
                     })
                     
                 } else {

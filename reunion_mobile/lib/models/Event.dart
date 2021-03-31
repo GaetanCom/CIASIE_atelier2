@@ -1,4 +1,6 @@
 import 'package:reunion_mobile/data/global.dart';
+import 'package:reunion_mobile/models/Guest.dart';
+import 'package:reunion_mobile/models/Message.dart';
 
 class Event {
   int id;
@@ -10,7 +12,9 @@ class Event {
   double lat;
   double long;
   int state;
-  Event(i, t, d, u, da, c, la, lo, st) {
+  List<Guest> guests;
+  List<Message> messages;
+  Event(i, t, d, u, da, c, la, lo, st, gu, me) {
     this.id = i;
     this.title = t;
     this.description = d;
@@ -20,5 +24,7 @@ class Event {
     this.lat = la;
     this.long = lo;
     this.state = st;
+    this.guests = gu;
+    this.messages = me;
   }
 }

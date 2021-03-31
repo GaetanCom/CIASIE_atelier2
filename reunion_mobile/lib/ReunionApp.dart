@@ -25,7 +25,7 @@ class _ReunionAppState extends State<ReunionApp> {
       title: 'Reunionou',
       theme: ThemeData(
         fontFamily: "Knewave",
-        primarySwatch: Colors.teal,
+        primarySwatch: Colors.lightBlue,
       ),
     );
   }

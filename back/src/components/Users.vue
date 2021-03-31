@@ -45,7 +45,6 @@
         dateConnexion:null,
         error:"",
         urlApi: "http://docketu.iutnc.univ-lorraine.fr:13003/",
-        // urlApi: "http://localhost:19080/",
 
       };
     },
@@ -100,7 +99,7 @@
     },
     mounted() {
       axios
-              .get("http://localhost:19080/users")
+              .get("http://docketu.iutnc.univ-lorraine.fr:13003/users")
               .then (response => {
                 console.log(response.data)
                 this.users = response.data

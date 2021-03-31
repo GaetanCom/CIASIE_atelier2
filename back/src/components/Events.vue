@@ -31,7 +31,6 @@
     data() {
       return {
         urlApi: "http://docketu.iutnc.univ-lorraine.fr:13003/events/",
-        // urlApi: "http://localhost:19080/events/",
         events:[],
         date:null,
         errored:false,
@@ -84,7 +83,7 @@
 
     mounted() {
       axios
-              .get("http://localhost:19080/events")
+              .get("http://docketu.iutnc.univ-lorraine.fr:13003/events")
               .then (response => {
                 console.log(response.data)
                 this.events = response.data

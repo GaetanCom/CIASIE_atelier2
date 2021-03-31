@@ -101,8 +101,7 @@ export default {
 
     data() {
         return {
-            // urlApi: "http://docketu.iutnc.univ-lorraine.fr:13003/events/",
-            urlApi: "http://localhost:19080/events/",
+            urlApi: "http://docketu.iutnc.univ-lorraine.fr:13003/events/",
             userId: null,
             eventUrl: null,
             loading: true,

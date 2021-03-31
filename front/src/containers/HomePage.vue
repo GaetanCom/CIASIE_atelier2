@@ -27,8 +27,7 @@ export default {
     
     data(){
         return{
-            // adresseApi: "http://docketu.iutnc.univ-lorraine.fr:13003/users/connection/checkRegistered?login=",
-            adresseApi: "http://localhost:19080/users/connection/checkRegistered?login=",
+            adresseApi: "http://docketu.iutnc.univ-lorraine.fr:13003/users/connection/checkRegistered?login=",
             connecter: '',
             alert: '',
             connection: false,

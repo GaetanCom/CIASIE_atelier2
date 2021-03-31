@@ -25,7 +25,6 @@
                     password: ""
                 },
                 urlApi: "http://docketu.iutnc.univ-lorraine.fr:13003/",
-                // urlApi: "http://localhost:19080/",
                 loading:false,
                 errored:false,
                 alertError:"",

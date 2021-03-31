@@ -20,7 +20,6 @@ import axios from 'axios';
 export default {
     data(){
         return {
-            // adresseApi: "http://localhost:19080/users",
             adresseApi: "http://docketu.iutnc.univ-lorraine.fr:13003/users",
             modifEtat: false,
         }

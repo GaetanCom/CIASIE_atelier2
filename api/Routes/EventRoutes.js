@@ -136,13 +136,13 @@ router.get('/members', async (req, res, next) => {
 
     let pseudo = req.query.p;
 
-
     try {
         let request = 
         "SELECT idMembers, firstname, lastname, pseudo FROM Members "
         + " WHERE pseudo LIKE '%" + pseudo + "%'"
         + " OR firstname LIKE '%" + pseudo + "%'"
-        + " OR lastname LIKE '%" + pseudo + "%'";
+        + " OR lastname LIKE '%" + pseudo + "%'"
+        + " OR mail LIKE '%" + pseudo + "%'";
 
         let listMembers = await bdd.query(request);
 

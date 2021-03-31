@@ -52,7 +52,7 @@ router.get('/', async(req, res, next) => {
 
 router.post('/', async(req, res, next) => {
 
-    const {number, street, country, zipcode, title, description, date, idCreator, idAddress} = req.body;
+    const {number, street, country, zipcode, title, description, date, idCreator} = req.body;
     const geocoder = NodeGeocoder(options);
     const address = number + " " + street;
     

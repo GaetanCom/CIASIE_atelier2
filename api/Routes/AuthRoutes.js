@@ -15,12 +15,13 @@ router.get("/", async (req, res, next) => {
 
         allUsers.forEach(element => {
             data.push({
-                "idMembers": element.id,
+                "idMembers": element.idMembers,
                 "firstname": element.firstname,
                 "lastname": element.lastname,
                 "mail": element.mail,
                 "pseudo": element.pseudo,
-                "password":element.password
+                "password":element.password,
+                "last_connexion":element.last_connexion
             })
         });
         return res.json(data);
@@ -49,12 +50,13 @@ router.get('/:id', async (req, res, next) => {
 
         data.push({
 
-            "idMembers": oneUser.id,
+            "idMembers": oneUser.idMembers,
             "firstname": oneUser.firstname,
             "lastname": oneUser.lastname,
             "mail": oneUser.mail,
             "pseudo": oneUser.pseudo,
-            "password": oneUser.password
+            "password": oneUser.password,
+            "last_connexion": oneUser.last_connexion
         })
         return res.send(data);
         

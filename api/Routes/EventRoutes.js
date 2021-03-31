@@ -271,6 +271,7 @@ router.post('/:url/member', async (req, res, next) => {
             }
         })
 
+
         let request = 
         "INSERT INTO Guests (idGuests, accept, id_event, id_member) VALUES (null, 3, "
         + events.idEvents + ", " 
@@ -437,6 +438,7 @@ router.get('/:idMembers/events', async (req, res, next) => {
 
         console.log(allEventsByMemberId);
 
+
         if(allEventsByMemberId.length === 0) {
             res.json({
                 "message": "No Event Found"
@@ -458,5 +460,133 @@ router.get('/:idMembers/events', async (req, res, next) => {
     console.log(idMembers);
 })
 
+
+router.delete("/event", async (req, res, next)=> {
+    let id = req.body.id;
+
+    let requeteSQL = "DELETE FROM Events WHERE idEvents=" + id;
+
+    try {
+        let deleteUser = await bdd.query(requeteSQL);
+
+        return res.json({
+            "message": "SUCCESS"
+        })
+    } catch(err) {
+        console.log(err);
+        
+        return res.json({
+            "message": "ERROR"
+        })
+    }
+});
+
+router.get('/byMember/:id', async (req, res, next) => {
+    let idMember = req.params.id;
+    let sqlreq = 'SELECT * FROM Events INNER JOIN Guests ON Events.idEvents = Guests.id_event INNER JOIN Members On Events.id_creator=Members.idMembers INNER JOIN Address ON Events.id_address=Address.idAddress WHERE id_member='+idMember;
+    
+    try {
+        const eventsData = await bdd.query(sqlreq);
+        const events = eventsData;
+        
+        let jsonData = [];
+        let dataEvent;
+        
+        events.forEach(async element => {
+            
+            dataEvent = {
+                "id": element.idEvents,
+                "title": element.title,
+                "description": element.description,
+                "date": element.date,
+                "url": element.url,
+                "creator": element.pseudo,
+                "lat": element.latitude,
+                "long": element.longitude,
+                "state":element.accept
+            }
+
+            jsonData.push(dataEvent);
+        });
+
+        res.send(jsonData);
+    } catch (error) {
+        console.error(error);
+    }
+
+})
+
+
+router.put("/address", async (req, res, next)=> {
+    let newNumber = req.body.number;
+    let newStreet = req.body.street;
+    let newZipcode = req.body.zipcode;
+    let newCountry = req.body.country;
+    let newLongitude = req.body.longitude;
+    let newLatitude = req.body.latitude;
+
+    let id = req.body.id;
+
+    let requeteSQL = "UPDATE Address SET number="+  newNumber 
+    + ", street = '" + newStreet
+    + "', zipcode = " + newZipcode
+    +", country = '" + newCountry
+    +"', longitude = " + newLongitude
+    +", latitude = " + newLatitude
+    +" WHERE idAddress = " + id;
+
+    try {
+        let newUser = await bdd.query(requeteSQL);
+
+        return res.json({
+            "idAddress": id,
+            "number": newNumber,
+            "street": newStreet,
+            "country": newCountry,
+            "longitude": newLongitude,
+            "latitude": newLatitude
+        })
+    } catch(err) {
+        console.log(err);
+        
+        return res.json({
+            "message": "ERROR"
+        })
+    }
+})
+
+router.get("/address/:id", async (req, res, next) => {
+
+    let idAddress = req.params.id;
+    let data = [];
+
+    try {
+        
+        let oneAddress = await bdd.query('SELECT * FROM Address WHERE idAddress=' + idAddress);
+
+        if (oneAddress.length === 0) {
+            data.push({
+                "message": "No Address found"
+            })
+            return res.send(data);
+        }
+        
+        oneAddress = oneAddress[0];
+
+        data.push({
+            "idAddress": oneAddress.idAddress,
+            "number": oneAddress.number,
+            "street": oneAddress.street,
+            "zipcode": oneAddress.zipcode,
+            "country": oneAddress.country,
+            "longitude":oneAddress.longitude,
+            "latitude":oneAddress.latitude
+        });
+        return res.send(data);
+
+    } catch(err) {
+        console.error(err);
+    }
+});
 
 module.exports = router;

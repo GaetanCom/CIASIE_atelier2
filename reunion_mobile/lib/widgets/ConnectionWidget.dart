@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
 import 'package:reunion_mobile/data/global.dart';
 import 'package:reunion_mobile/models/Member.dart';
+import 'package:reunion_mobile/pages/Homepage.dart';
 
 class ConnectionWidget extends StatefulWidget {
   @override
@@ -23,38 +24,29 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
 
     var client = new http.Client();
 
-    var uri = Uri.parse(
-        "http://docketu.iutnc.univ-lorraine.fr:13003/users/connection/checkRegistered?login=" +
-            login +
-            "&pwd=" +
-            pwd);
+    var uri = Uri.parse("http://" +
+        Global.host +
+        "/users/connection/checkRegistered?login=" +
+        login +
+        "&pwd=" +
+        pwd);
+
     print(uri.host);
     print(uri.port);
 
     client.get(uri).then((response) {
       print(response.body);
       var json = jsonDecode(response.body);
-
-      if (json["id"] != null) {
-        Global.user = new Member(json["id"], json["firstname"],
+      print(json["idMembers"]);
+      if (json["idMembers"] != null) {
+        Global.user = new Member(json["idMembers"], json["firstname"],
             json["lastName"], json["mail"], json["pseudo"], json["password"]);
-        Navigator.pushNamed(c, "/");
+
+        Navigator.pushReplacementNamed(c, "/home");
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(json["message"])));
       }
-
-      /*if (response.body != "-1") {
-      
-        
-        Global.user = new Member(json["id"], json["firstname"],
-            json["lastName"], json["mail"], json["pseudo"], json["password"]);
-
-        Navigator.pushNamed(c, "/");
-      } else {
-        print("mauvaise connexion");
-        
-      }*/
     });
   }
 

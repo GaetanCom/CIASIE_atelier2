@@ -4,10 +4,10 @@
 
     <div class="nav">
       <ul class="menu">
-        <router-link class="link" v-if="authenticated" to="/login" v-on:click.native="logout()" replace  title="Déconnexion"><span class="icon-cancel-circle" title="Déconnexion"></span></router-link>
-        <router-link class="link" v-if="authenticated" to="/home" title="Accueil"><span class="icon-home" title="Accueil"></span></router-link>
-        <router-link class="link" v-if="authenticated" to="/users"  title="Utilisateurs"><span class="icon-users" title="Utilisateurs"></span></router-link>
-        <router-link class="link" v-if="authenticated" to="/events" title="Évènements"><span class="icon-calendar" title="Évènements"></span></router-link>
+        <router-link class="link" v-if="authenticated" to="/login" v-on:click.native="logout()" replace  title="Déconnexion"><img src="src/assets/quit.png" width="25px" height="25px"></router-link>
+        <router-link class="link" v-if="authenticated" to="/home" title="Accueil"><img src="src/assets/home.png" width="30px" height="30px"></router-link>
+        <router-link class="link" v-if="authenticated" to="/users"  title="Utilisateurs"><img src="src/assets/users.png" width="30px" height="30px"></router-link>
+        <router-link class="link" v-if="authenticated" to="/events" title="Évènements"><img src="src/assets/date.png" width="25px" height="25px"></router-link>
       </ul>
 
     </div>
@@ -36,7 +36,8 @@
       logout() {
         this.authenticated = false;
       }
-    }
+    },
+    computed: { moment: () => moment }
   }
 </script>
 
@@ -91,19 +92,5 @@
     text-align: center;
   }
 
-  .icon-home:before {
-     content: "\e900";
-   }
 
-  .icon-users:before {
-    content: "\e972";
-  }
-
-  .icon-calendar:before {
-    content: "\e953";
-  }
-
-  .icon-cancel-circle:before {
-    content: "\ea0d";
-  }
 </style>

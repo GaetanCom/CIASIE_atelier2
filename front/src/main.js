@@ -1,29 +1,38 @@
 import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
+import BootstrapVue from 'bootstrap-vue'
+import VueSession from 'vue-session'
 
-import HomePage from './containers/HomePage.vue';
-import EventsPage from './containers/EventsPage.vue';
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 import CreateEventPage from './containers/CreateEventPage.vue';
+import EventsPage from './containers/Events/EventsPage.vue';
+import EventPage from './containers/Events/EventPage.vue';
+import HomePage from './containers/HomePage.vue';
 import RegisterPage from './containers/RegisterPage.vue';
+import LogoutPage from './containers/LogoutPage.vue';
+import ManagePage from './containers/ManagePage.vue';
+import AddMembersEvent from './containers/Events/AddMembersEvent.vue';
 
 Vue.use(VueRouter);
+Vue.use(BootstrapVue);
+Vue.use(VueSession);
 
 const router = new VueRouter({
   mode:'history',
   routes:[
-      {
-        path: "/", component:HomePage
-      },
-      {
-        path: "/events", component: EventsPage
-      },
-      {
-        path: "/create", component: CreateEventPage
-      },
-      {
-        path: "/register", component: RegisterPage
-      }
+      { path: "/", component:HomePage },
+      { path: "/create", component: CreateEventPage},
+      { path: "/register", component: RegisterPage},
+      { path: "/logout", component: LogoutPage},
+      { path: "/user/:username" , component: ManagePage},
+
+      // Événements
+      { path: "/events", component: EventsPage },
+      { path: "/events/:urlEvent", component: EventPage},
+      { path: "/events/:urlEvent/addmembers", component: AddMembersEvent},
     ]
   })
 

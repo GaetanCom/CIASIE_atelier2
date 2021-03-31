@@ -51,29 +51,72 @@ router.get('/', async(req, res, next) => {
 })
 
 router.post('/', async(req, res, next) => {
-console.log(req.body);
-    const {title, description, date, idCreator, idAddress} = req.body;
-    const members = req.body.members;
+
+    const {number, street, country, zipcode, title, description, date, idCreator, idAddress} = req.body;
+    const geocoder = NodeGeocoder(options);
+    const address = number + " " + street;
     
     try {
         // Vérification que l'URL qui sera attribuée n'existe pas 
-        let existingUrl;
-        let url;
+        let existingUrl, url;
         do {
             url = CreateURL();
-            existingUrl = await bdd.all("SELECT * FROM Events WHERE url='"+url+"'");
-        } while(existingUrl.length !== 0);
+            console.log(url);
+            const sqlUrl = "SELECT * FROM Events WHERE EXISTS ( SELECT * FROM Events WHERE url='"+url+"')";
+            console.log(sqlUrl);
+            existingUrl = await bdd.query(sqlUrl)
+        } while(existingUrl.length === 1);
+
+        const dataLocalization = await geocoder.geocode({
+            address: address,
+            country: country,
+            zipcode: zipcode
+        });
+
+        const longitude = dataLocalization[0].longitude;
+        const latitude = dataLocalization[0].latitude;
+
+        let reqAddress = "INSERT INTO Address VALUES (null, " 
+        + number + ", '"
+        + street + "', "
+        + zipcode + ", '"
+        + country + "', "
+        + longitude + ", "
+        + latitude + ");"
+
+        const request = await bdd.query(reqAddress);
+
         const events = await bdd.query(
             "INSERT INTO Events (idEvents, title, description, date, url, id_address, id_creator) VALUES (null, '"
             + title + "', '"
             + description + "', '"
             + date + "', '"
             + url + "', "
-            + idAddress + ","
+            + request.insertId + ","
+            + idCreator + ");"
+        );
+
+        console.log("INSERT INTO Guests (idGuests, accept, id_event, id_member) VALUES ("
+        + idCreator + ", 1, "
+        + events.insertId + ","
+        + idCreator + ");")
+
+        const firstGuest = await bdd.query(
+            "INSERT INTO Guests (accept, id_event, id_member) VALUES ( 1, "
+            + events.insertId + ", "
             + idCreator + ");"
         );
     
         res.status(201).json({
+            address: {
+                idAddress: request.insertId,
+                number: number,
+                street: street,
+                zipcode: zipcode,
+                country: country,
+                longitude: longitude,
+                latitude: latitude,
+            },
             idEvents: events.insertId,
             title: title,
             description: description,
@@ -88,6 +131,42 @@ console.log(req.body);
     };
 
 });
+
+router.get('/members', async (req, res, next) => {
+
+    let pseudo = req.query.p;
+
+    try {
+        let request = 
+        "SELECT idMembers, firstname, lastname, pseudo FROM Members "
+        + " WHERE pseudo LIKE '%" + pseudo + "%'"
+        + " OR firstname LIKE '%" + pseudo + "%'"
+        + " OR lastname LIKE '%" + pseudo + "%'"
+        + " OR mail LIKE '%" + pseudo + "%'";
+
+        let listMembers = await bdd.query(request);
+
+        console.log(listMembers);
+        let members = [];
+
+        listMembers.forEach(element => {
+            let oneMember = {
+                idMembers: element.idMembers,
+                firstname: element.firstname,
+                lastname: element.lastname,
+                pseudo: element.pseudo,
+            }
+            members.push(oneMember);
+        })
+
+        res.json({
+            members: members,
+        })
+
+    } catch(err) {
+        console.log(err);
+    }
+})
 
 router.get('/:urlevent', async (req, res, next) => {
 
@@ -104,6 +183,8 @@ router.get('/:urlevent', async (req, res, next) => {
         console.log(requeteSQLOneEvent);
 
         let oneEvent = await bdd.all(requeteSQLOneEvent);
+
+        console.log(oneEvent);
 
         let jsonRes = {
             "message": "No Event Found"
@@ -171,6 +252,7 @@ router.get('/:urlevent', async (req, res, next) => {
     }
 
 });
+
 router.post('/:url/member', async (req, res, next) => {
 
     const urlEvent = req.params.url;
@@ -178,7 +260,18 @@ router.post('/:url/member', async (req, res, next) => {
 
     try {
         let events = await bdd.one("SELECT idEvents from Events WHERE url = '" + urlEvent + "';")
-        console.log(events);
+        let membersId = await bdd.all("SELECT id_member from Guests WHERE id_event = '" + events.idEvents + "';")
+        console.log(membersId);
+
+        membersId.forEach(element => {
+            if(element.id_member === memberId) {
+                res.json({
+                    "message": "User already in this Event"
+                })
+            }
+        })
+
+
         let request = 
         "INSERT INTO Guests (idGuests, accept, id_event, id_member) VALUES (null, 3, "
         + events.idEvents + ", " 
@@ -189,7 +282,7 @@ router.post('/:url/member', async (req, res, next) => {
         res.json({
             idMembers: addMember.insertId,
             accept: 3,
-            event: eventId,
+            event: events.idEvents,
             member: memberId
         })
 
@@ -198,6 +291,35 @@ router.post('/:url/member', async (req, res, next) => {
         console.log(err);
     }
 });
+
+router.delete('/:url/member/:memberid', async (req, res, next) => {
+
+    const urlEvent = req.params.url;
+    const memberId = req.params.memberid;
+
+    try {
+
+        let idEvent = await bdd.one("SELECT idEvents FROM Events WHERE url = '" + urlEvent + "'")
+        console.log(idEvent);
+
+        let requetedelete = 
+        "DELETE FROM Guests"
+        + " WHERE id_event = " +  idEvent.idEvents
+        + " AND idGuests = " + memberId;
+
+        console.log(requetedelete);
+
+        let deleteMember = await bdd.query(requetedelete);
+
+        console.log(deleteMember)
+
+        res.send(deleteMember);
+
+    } catch(err) {
+        console.log(err);
+    }
+
+})
 
 router.post('/:url/member/:id', async (req, res, next) => {
 
@@ -256,6 +378,7 @@ router.get('/:url/members', async (req, res, next) => {
                 let accept = el.accept === 1 ? "agreed" : el.accept === 2 ? "refused" : "waiting";
                 tabMembers.push({
                     "idGuests": el.idGuests,
+                    "pseudo": el.pseudo,
                     "firstname": el.firstname,
                     "lastname": el.lastname,
                     "accept": accept
@@ -278,7 +401,7 @@ router.get('/:url/members', async (req, res, next) => {
 })
 
 router.get("/createdBy/:id", async (req, res, next) => {
-    let userId = req.params.id
+    let userId = req.params.id;
     try {
         let sql = "SELECT * FROM Events WHERE id_creator=" + userId
         let listeEvents = await bdd.query(sql)
@@ -300,81 +423,45 @@ router.get("/createdBy/:id", async (req, res, next) => {
     }
 })
 
-router.get('/members', async (req, res, next) => {
-
-    let pseudo = req.query.p;
-
+router.get('/:idMembers/events', async (req, res, next) => {
+    let idMembers = req.params.idMembers;
 
     try {
-        let request = "SELECT id, pseudo FROM Members WHERE pseudo LIKE '%" + pseudo + "%'";
+        let sqlAllEventsById = 
+            "SELECT *" 
+            + " FROM Events e"
+            + " JOIN Guests g ON g.id_event = e.idEvents"
+            + " JOIN Members c ON c.idMembers = e.id_creator"
+            + " WHERE g.id_member = " + idMembers;
 
-        let listMembers = await bdd.query(request);
+        let allEventsByMemberId = await bdd.all(sqlAllEventsById);
 
-        console.log(listMembers);
-        let members = [];
+        console.log(allEventsByMemberId);
 
-        listMembers.forEach(element => {
-            let oneMember = {
-                idMembers: element.idMembers,
-                pseudo: element.pseudo,
-            }
-            members.push(oneMember);
-        })
 
-        res.json({
-            members: members,
-        })
+        if(allEventsByMemberId.length === 0) {
+            res.json({
+                "message": "No Event Found"
+            })
+        } else {
+            let jsonResponse = []
 
-    } catch(err) {
-        console.log(err);
+            allEventsByMemberId.forEach(element => {
+                jsonResponse.push(element);
+            })
+
+            res.json(jsonResponse);
+        }
+
+    } catch (err) {
+        console.log(err)
     }
+
+    console.log(idMembers);
 })
 
 
-router.post('/address', async(req, res, next) => {
-    console.log(req.body);
-    const {number, street, country, zipcode} = req.body;
-    const geocoder = NodeGeocoder(options);
-    const address = number + " " + street;
-
-
-    try {
-        const dataLocalization = await geocoder.geocode({
-            address: address,
-            country: country,
-            zipcode: zipcode
-        });
-
-        const longitude = dataLocalization[0].longitude;
-        const latitude = dataLocalization[0].latitude;
-
-        let reqAddress = "INSERT INTO Address VALUES (null, " 
-        + number + ", '"
-        + street + "', "
-        + zipcode + ", '"
-        + country + "', "
-        + longitude + ", "
-        + latitude + ");"
-
-        const request = await bdd.query(reqAddress);
-
-        return res.status(201).json({
-            idAddress: request.insertId,
-            number: number,
-            street: street,
-            zipcode: zipcode,
-            country: country,
-            longitude: longitude,
-            latitude: latitude,
-        })
-
-    } catch(err) {
-        console.log(err);
-    }
-
-})
-
-router.post("/delete/event", async (req, res, next)=> {
+router.delete("/event", async (req, res, next)=> {
     let id = req.body.id;
 
     let requeteSQL = "DELETE FROM Events WHERE idEvents=" + id;
@@ -392,7 +479,7 @@ router.post("/delete/event", async (req, res, next)=> {
             "message": "ERROR"
         })
     }
-})
+});
 
 router.get('/byMember/:id', async (req, res, next) => {
     let idMember = req.params.id;
@@ -430,7 +517,7 @@ router.get('/byMember/:id', async (req, res, next) => {
 })
 
 
-router.post("/update/address", async (req, res, next)=> {
+router.put("/address", async (req, res, next)=> {
     let newNumber = req.body.number;
     let newStreet = req.body.street;
     let newZipcode = req.body.zipcode;

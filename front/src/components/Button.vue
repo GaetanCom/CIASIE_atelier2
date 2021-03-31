@@ -1,5 +1,5 @@
 <template>
-    <button 
+    <button class="button"
         v-on:click="sendInfo"> 
         {{ buttonName }} 
         </button>
@@ -20,5 +20,11 @@ export default {
 </script>
 
 <style>
+
+.button{
+    background-color: #00bae1;
+    color : white;
+
+}
 
 </style>

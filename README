@@ -1,5 +1,13 @@
 # Atelier 2
 
+Pour lancez l'api en local il suffit :
+De se mettre a la racine du projet (la ou se trouve ce README)
+Ouvrir un terminal et lancez la commande docker-compose up 
+Cela devrait lancez l'instalation de la base de donnée 
+Ainsi que lancez l'installation de phpmyadmin pour avoir la possibilité de voir la base de données.
+L'api devrait alors se lancer sur l adresse localhost:19080. 
+
+
 pour lancer l'application web client :
 
 Allez dans le dossier front.
@@ -29,3 +37,5 @@ Pour lancez l'application mobile :
 
 Allez dans le dossier reunion_mobile 
 Et lancez la commande flutter run
+
+

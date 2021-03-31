@@ -4,29 +4,60 @@ networks:
   reunion.net:
     driver: bridge
 
-services: 
+services:
   api.reunion:
     container_name: api.reunion
     image: node
-    ports: 
+    ports:
       - "19080:3000"
-    volumes: 
+    volumes:
       - ./api:/usr/src/app
       - ./api/node_modules:/usr/src/outside/node_modules
     working_dir: /usr/src/app
     command: bash -c 'npm i && npm run dev'
     links:
       - mysql.reunion
-    env_file: 
+    env_file:
       - ./api/.env.dev
 
+  back.reunion:
+    container_name: back.reunion
+    image: node
+    ports:
+      - "13002:8080"
+    volumes:
+      - ./back:/usr/src/app
+      - ./back/node_modules:/usr/src/outside/node_modules
+      - ./back/dist:/usr/src/outside/dist
+    working_dir: /usr/src/app
+    command: bash -c 'npm run dev'
+    links:
+      - mysql.reunion
+    env_file:
+      - ./api/.env.dev
+
+  front.reunion:
+    container_name: front.reunion
+    image: node
+    ports:
+      - "19280:8080"
+    volumes:
+      - ./front:/usr/src/app
+      - ./front/node_modules:/usr/src/outside/node_modules
+      - ./front/dist:/usr/src/outside/dist
+    working_dir: /usr/src/app
+    command: bash -c 'npm install -g http-server && npm install && npm run build && http-server dist'
+    links:
+      - mysql.reunion
+    env_file:
+      - ./front/.env.dev
 
   mysql.reunion:
     container_name: mysql.reunion
     image: mysql:latest
     restart: always
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8 --collation-server=utf8_general_ci
-    env_file: 
+    env_file:
       - ./api/.env.dev
     ports:
       - "3306:3306"
@@ -34,41 +65,12 @@ services:
       - ./mysql_data:/var/lib/mysql
       - ./mysql:/docker-entrypoint-initdb.d
 
-      
   phpmyadmin.reunion:
     image: phpmyadmin
     restart: always
-    ports: 
+    ports:
       - "8080:80"
-    environment: 
+    environment:
       - PMA_ARBITRARY=1
-    links: 
+    links:
       - mysql.reunion
-  
-#  back.reunion:
-#    container_name: back.reunion
-#    image: node
-#    ports: 
-#      - "19180:3000"
-#    volumes: 
-#      - ./back:/usr/src/app
-#      - ./back/node_modules:/usr/src/outside/node_modules
-#    working_dir: /usr/src/app
-#    command: bash -c 'npm i && npm run dev'
-#    networks: 
-#      - reunion.net
-
-#  front.reunion:
-#    container_name: front.reunion
-#    image: node
-#    ports: 
-#      - "19280:3000"
-#    volumes: 
-#      - ./front:/usr/src/app
-#      - ./front/node_modules:/usr/src/outside/node_modules
-#    working_dir: /usr/src/app
-#    command: bash -c 'npm i && npm run dev'
-#    networks: 
-#      - reunion.net
-
-

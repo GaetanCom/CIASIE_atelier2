@@ -7,6 +7,7 @@ import 'package:latlong/latlong.dart';
 import 'package:reunion_mobile/data/global.dart';
 import 'package:reunion_mobile/models/Event.dart';
 import "package:http/http.dart" as http;
+import 'package:reunion_mobile/widgets/GuestList.dart';
 
 class EventDetailWidget extends StatefulWidget {
   Event event;
@@ -17,10 +18,14 @@ class EventDetailWidget extends StatefulWidget {
   }
 
   @override
-  _EventDetailWidgetState createState() => _EventDetailWidgetState();
+  _EventDetailWidgetState createState() => _EventDetailWidgetState(this.event);
 }
 
 class _EventDetailWidgetState extends State<EventDetailWidget> {
+  Event event;
+  _EventDetailWidgetState(e) {
+    this.event = e;
+  }
   void accept() {
     var client = new http.Client();
 
@@ -59,6 +64,7 @@ class _EventDetailWidgetState extends State<EventDetailWidget> {
     setState(() {});
   }
 
+  String buildGuests() {}
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -68,6 +74,8 @@ class _EventDetailWidgetState extends State<EventDetailWidget> {
           children: [
             Text("Date: "),
             Text(this.widget.event.date),
+            VerticalDivider(),
+            Text("Url:" + this.widget.event.url),
           ],
         ),
         Row(
@@ -93,7 +101,7 @@ class _EventDetailWidgetState extends State<EventDetailWidget> {
           ],
         ),
         Container(
-          height: 400,
+          height: 300,
           child: FlutterMap(
             options: MapOptions(
               center: LatLng(this.widget.event.lat, this.widget.event.long),
@@ -119,7 +127,8 @@ class _EventDetailWidgetState extends State<EventDetailWidget> {
               ),
             ],
           ),
-        )
+        ),
+        GuestList(this.event.guests),
       ],
     );
   }

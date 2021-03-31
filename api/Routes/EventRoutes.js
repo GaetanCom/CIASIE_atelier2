@@ -522,20 +522,31 @@ router.put("/address", async (req, res, next)=> {
     let newStreet = req.body.street;
     let newZipcode = req.body.zipcode;
     let newCountry = req.body.country;
-    let newLongitude = req.body.longitude;
-    let newLatitude = req.body.latitude;
+    const geocoder = NodeGeocoder(options);
+    const newAddress = newNumber + " " + newStreet;    
+    
 
     let id = req.body.id;
 
-    let requeteSQL = "UPDATE Address SET number="+  newNumber 
-    + ", street = '" + newStreet
-    + "', zipcode = " + newZipcode
-    +", country = '" + newCountry
-    +"', longitude = " + newLongitude
-    +", latitude = " + newLatitude
-    +" WHERE idAddress = " + id;
-
+    
     try {
+        const dataLocalization = await geocoder.geocode({
+            address: newAddress,
+            country: newCountry,
+            zipcode: newZipcode
+        });
+        
+        const newLongitude = dataLocalization[0].longitude;
+        const newLatitude = dataLocalization[0].latitude;
+
+        let requeteSQL = "UPDATE Address SET number="+  newNumber 
+        + ", street = '" + newStreet
+        + "', zipcode = " + newZipcode
+        +", country = '" + newCountry
+        +"', longitude = " + newLongitude
+        +", latitude = " + newLatitude
+        +" WHERE idAddress = " + id;
+
         let newUser = await bdd.query(requeteSQL);
 
         return res.json({

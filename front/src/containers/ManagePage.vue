@@ -86,10 +86,10 @@ export default {
                     })
                     .finally( () => this.loading = false); 
                 }else{
-                    console.log("les deux mot de passe ne sont pas identique !");
+                    console.log("Mots de passe différents !");
                 }
             }else{
-                console.log("votre mot de passe n'est pas bon !");
+                console.log("Mot de passe incorect !");
             }
         },
     }

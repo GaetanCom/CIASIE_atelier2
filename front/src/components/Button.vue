@@ -1,8 +1,9 @@
 <template>
-    <button class="button"
-        v-on:click="sendInfo"> 
+    <b-button 
+        v-on:click="sendInfo"
+        variant="primary">
         {{ buttonName }} 
-        </button>
+    </b-button>
 </template>
 
 <script>

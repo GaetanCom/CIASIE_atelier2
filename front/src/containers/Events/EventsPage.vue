@@ -26,9 +26,6 @@
                         v-for="eventC in eventcreator"
                         :key="eventC.idEvents"
                         :title="eventC.title"
-                        tag="article"
-                        style="max-width: 20rem;"
-                        class="mb-2 test"
                         :pseudo="eventC.pseudo"
                         :accept="eventC.accept"
                         :date="eventC.date"
@@ -47,9 +44,6 @@
                         v-for="event in eventAll"
                         :key="event.idEvents"
                         :title="event.title"
-                        tag="article"
-                        style="max-width: 20rem;"
-                        class="mb-2"
                         :pseudo="event.pseudo"
                         :accept="event.accept"
                         :date="event.date"
@@ -71,8 +65,8 @@ import OneEventCard from './OneEventCard';
 export default {
     data() {
         return {
-            urlApi: "http://docketu.iutnc.univ-lorraine.fr:13003/events/",
-            // urlApi: "http://localhost:19080/events/",
+            // urlApi: "http://docketu.iutnc.univ-lorraine.fr:13003/events/",
+            urlApi: "http://localhost:19080/events/",
             userId: null,
             eventAll: [],
             eventcreator: [],
@@ -127,16 +121,24 @@ export default {
 .myEventsPage {
     padding: 2%;
     width: 100%;
+    margin: auto;
+    max-width: 2000px;
+
+    h2 {
+        text-align: left;
+    }
 }
 
 .myEventsPage_allEvents {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    justify-items: center;
 }
 
 .event {
     &_loading {
         div {
-            text-align: center;
             margin: 30px 0;
         }
     }

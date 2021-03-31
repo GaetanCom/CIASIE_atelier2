@@ -39,13 +39,13 @@
             <br>
             <Input 
                 id="addressNumber"
-                placeholder="numero"
+                placeholder="Numero"
                 type="text"
                 ref="numAddressEvent"
                 :sendInfo="sendEventsHandler" />
             <Input 
                 id="addressStreet"
-                placeholder="rue"
+                placeholder="Rue"
                 type="text"
                 ref="streetAddressEvent"
                 :sendInfo="sendEventsHandler" />
@@ -80,8 +80,8 @@ import Input from '../components/Input';
 export default {
     data(){
         return {
-            // apiUrl: "http://localhost:19080",
-            urlApi: "http://docketu.iutnc.univ-lorraine.fr:13003/",
+            apiUrl: "http://localhost:19080",
+            // urlApi: "http://docketu.iutnc.univ-lorraine.fr:13003/",
             error: false,
             messageError: "",
             loading: false,
@@ -152,6 +152,7 @@ export default {
                         console.log(err)
                     }).finally(() => {
                         console.log("ADDR = " + this.idAddr)
+                        this.$router.push('/events/' + this.url + '/addmembers')
                     })
                     
                 } else {

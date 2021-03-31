@@ -38,7 +38,6 @@ export default {
         envoieValeur(){
             let value ="";
             let data;
-            console.log("je suis avant la serie de if et la valeur du props est : "+this.valeur)
             if(this.valeur == "mail"){
                 value = this.$refs.mail._data.donnee;
                 data = {

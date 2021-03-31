@@ -4,7 +4,7 @@
         :title="title"
         tag="article"
         style="max-width: 20rem;"
-        class="mb-2">
+        class="mb-2 test">
         <b-card-text>
             <p>Crée par {{pseudo}} </p>
             <p>
@@ -45,6 +45,21 @@ export default {
 </script>
 
 <style lang="scss">
+
+.test {
+    width: 400px;
+    margin: 20px auto !important;
+    border: solid 2px ;
+    box-shadow: 2px 2px 2px #000;
+    border-radius: 10px;
+}
+
+h4 {
+    color: #00bbdd;
+    font-weight: bold;
+    font-size: 2.2em;
+}
+
 
 .accept {
     &_ok {

@@ -7,11 +7,11 @@
                 </b-alert>
             </div>
             <div class="container test">
-                <Input placeholder="login" id="nom" type="text" value="" ref="login"> </Input>
+                <Input placeholder="Pseudo" id="nom" type="text" value="" ref="login"> </Input>
                 <br>
                 <Input placeholder="Mot de passe" id="mdp" type="password" :sendInfo="sendInfoHandler" ref="password"> </Input>
                 <br>
-                <Button buttonName="se connecter" :sendInfo="sendInfoHandler"></Button>
+                <Button buttonName="Se connecter" :sendInfo="sendInfoHandler"></Button>
             </div>
         </div>
     </div>
@@ -27,8 +27,8 @@ export default {
     
     data(){
         return{
-            adresseApi: "http://docketu.iutnc.univ-lorraine.fr:13003/users/connection/checkRegistered?login=",
-            // adresseApi: "http://localhost:19080/users/connection/checkRegistered?login=",
+            // adresseApi: "http://docketu.iutnc.univ-lorraine.fr:13003/users/connection/checkRegistered?login=",
+            adresseApi: "http://localhost:19080/users/connection/checkRegistered?login=",
             connecter: '',
             alert: '',
             connection: false,

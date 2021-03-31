@@ -62,7 +62,7 @@ router.post('/', async(req, res, next) => {
         do {
             url = CreateURL();
             console.log(url);
-            const sqlUrl = "SELECT * FROM Events WHERE EXISTS ( SELECT * FROM Events WHERE url='"+url+"')";
+            const sqlUrl = "SELECT idEvents FROM Events WHERE url = '"+ url +"';";
             console.log(sqlUrl);
             existingUrl = await bdd.query(sqlUrl)
         } while(existingUrl.length === 1);

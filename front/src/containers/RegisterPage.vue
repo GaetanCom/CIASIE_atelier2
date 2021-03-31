@@ -4,7 +4,7 @@
             <span class="closebtn" v-on:click="supprimerAlert">&times;</span>
                 {{ this.alert }}
         </div>
-        <Input  placeholder="prénom" id="prenom" type="text" value="" ref="firstname"> </Input>
+        <Input  placeholder="Prénom" id="prenom" type="text" value="" ref="firstname"> </Input>
         <br>
         <Input  placeholder="Nom" id="nom" type="text" value="" ref="name"> </Input>
         <br>
@@ -12,11 +12,11 @@
         <br>
         <Input  placeholder="Pseudo" id="login" type="text" value="" ref="login"> </Input>
         <br>
-        <Input  placeholder="mot de passe" id="password" type="password" value="" ref="password"> </Input>
+        <Input  placeholder="Mot de passe" id="password" type="password" value="" ref="password"> </Input>
         <br>
-        <Input  placeholder="comfirmer mot de passe" id="coPassword" type="password" value="" :sendInfo="sendInfoInscription" ref="coPassword"> </Input>
+        <Input  placeholder="Mot de passe (confirmation)" id="coPassword" type="password" value="" :sendInfo="sendInfoInscription" ref="coPassword"> </Input>
         <br>
-        <Button buttonName="s'inscrire" :sendInfo="sendInfoInscription" ></Button>
+        <Button buttonName="S'inscrire" :sendInfo="sendInfoInscription" ></Button>
     </div>
 </template>
 
